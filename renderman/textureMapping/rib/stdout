@@ -2,8 +2,9 @@ Statistics for frame 1
 * Stats for group Task Profiling :
     
     task                     user    kernel  real    calls
-    REYES                    0.55    0.02    0.29    1
-    Total :                  0.55    0.02    0.29    1
+    ReadArchive              0.00    0.00    0.09    1
+    REYES                    0.57    0.03    0.30    1
+    Total :                  0.57    0.03    0.39    2
 
 * Stats for group REYES (Statistics concerning REYES rendering module) :
     Total number of u-polygons :            74280
@@ -65,24 +66,24 @@ Statistics for frame 1
     
     item                       current   peak   overall peak
     unprocessed gprim              0       0       0
-    gprim                          0    5600    1680
+    gprim                          0    5600    1064
     gprim (polygons)               0      15 K    14 K
     gprim (subdiv)                 0       0       0
     gprim (curves)                 0       0       0
-    gprim variables                0      26 K    12 K
+    gprim variables                0      24 K    12 K
     particles                      0       0       0
     topology data                  0       0       0
-    grid                           0     268 K   250 K
-    shaded grid                    0      11 K  8816
-    grid AOV                       0     233 K   229 K
+    grid                           0     271 K   206 K
+    shaded grid                    0      11 K  9976
+    grid AOV                       0     237 K   186 K
     texture objects              640     640     640
-    texture cache               1049 K  1049 K   901 K
-    hider and visible points       0     401 K   311 K
-    image data                     0     993 K   954 K
+    texture cache               1049 K  1049 K   999 K
+    hider and visible points       0     373 K   373 K
+    image data                     0     936 K   758 K
     buffered display data          0       0       0
     shader code                 1593    3920    3920
     shader instance             4044    6140    6140
-    shader variables               0      73 K     0
+    shader variables               0      61 K     0
     attributes                   578    1631    1631
     transform                   2220    2516    2516
     subsurface                     0       0       0
@@ -91,9 +92,9 @@ Statistics for frame 1
     photon map                     0       0       0
     inline archive                 0       0       0
     misc                           0      88      88
-    Total :                     1058 K  3090 K  2697 K
+    Total :                     1058 K  2996 K  2573 K
     
     Peak VM size     : 0 K
     Peak resident    : 0 K
-    Peak from malloc : 7679 K
+    Peak from malloc : 7923 K
 

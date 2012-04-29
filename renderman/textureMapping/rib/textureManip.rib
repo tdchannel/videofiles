@@ -1,6 +1,6 @@
 ##RenderMan RIB
 #Created by RenderMan for Maya 4.0.3 (Sep 14 2011 21:54:12 @958014) Pro
-#Wed Apr 25 20:09:39 PDT 2012
+#Sat Apr 28 18:40:02 PDT 2012
 version 3.04
 FrameBegin 1
 	Identity 
@@ -21,22 +21,20 @@ FrameBegin 1
 	Option "statistics" "int endofframe" [0]
 	Option "statistics" "string filename" ["stdout"]
 	Option "statistics" "string xmlfilename" [""]
-	Option "searchpath" "string archive" ["/Users/rudy/Desktop/TDChannel/videos/pipeline/json/:@"]
-	Option "searchpath" "string display" ["${RMSTREE}/bin:@"]
-	Option "searchpath" "string procedural" ["${RMSTREE}/lib/plugins:@"]
-	Option "searchpath" "string shader" ["../bin:@"]
-	Option "searchpath" "string texture" ["../tex:@"]
 	Option "searchpath" "string dirmap" [""]
+	Option "searchpath" "string archive" ["/Users/rudy/Desktop/TDChannel/videos/pipeline/json/:@"]
+	Option "searchpath" "string shader" ["../bin:@"]
+	Option "searchpath" "string texture" ["../tex/:@"]
 	CropWindow 0 1 0 1
 	Hider "hidden" "int jitter" [1] "int sigma" [0] "float sigmablur" [1]
 	Format 640 480 1
-	Display "simpleTexture.tif" "framebuffer" "rgba" "string filter" ["catmull-rom"] "float[2] filterwidth" [2 2] "int[4] quantize" [0 255 0 255] "float dither" [0.5] "float[2] exposure" [1 1]
+	Display "textureManip.iff" "framebuffer" "rgba" "string filter" ["catmull-rom"] "float[2] filterwidth" [2 2] "int[4] quantize" [0 255 0 255] "float dither" [0.5] "float[2] exposure" [1 1]
 	#Camera perspShape
 	Clipping 0.1 10000
 	Projection "perspective" "fov" [54.4322]
 	ScreenWindow -1 1 -0.75 0.75
 	Shutter 0 0
-	ConcatTransform [ -0.87462 0.2994 0.381313 -1.69997e-09  1.25404e-15 0.786522 -0.617562 -2.89993e-10  0.48481 0.540132 0.687907 -3.81126e-09  -1.43227e-14 -9.04029e-07 19.2837 1 ]
+	ConcatTransform [ -0.87462 0.2994 0.381313 -1.50567e-10  3.73654e-08 0.786522 -0.617563 -3.95538e-10  0.48481 0.540132 0.687907 -2.7163e-10  5.81334e-07 -2.95445e-07 20.1175 1 ]
 	Camera "world" "float[2] shutteropening" [0 1]
 	Option "user" "color camera_bg" [0 0 0] "float camera_bga" [0]
 	ResourceBegin 
@@ -58,7 +56,7 @@ FrameBegin 1
 					#slim shader: 00000CW0e-ldoTvJ
 					#slim light PseudoArea (light) 
 					TransformBegin
-					LightSource "pointlight" "pointLightShape1" "point from" [0 10 0] "float intensity" [200] 
+					LightSource "pointlight" "pointLightShape1" "float intensity" [200] "point from" [0 10 0] 
 					
 					TransformEnd
 					Attribute "user" "int shader_bindingstrength" [0]
@@ -80,12 +78,22 @@ FrameBegin 1
 				ConcatTransform [ 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1 ]
 			AttributeEnd 
 			AttributeBegin 
+				Attribute "identifier" "string name" ["CubeCompass"]
+				ConcatTransform [ 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1 ]
 			AttributeEnd 
 			AttributeBegin 
 			AttributeEnd 
 			AttributeBegin 
 			AttributeEnd 
 			AttributeBegin 
+			AttributeEnd 
+			AttributeBegin 
+			AttributeEnd 
+			AttributeBegin 
+				Attribute "identifier" "string name" ["pointLight1"]
+				ConcatTransform [ 1 0 0 0  0 1 0 0  0 0 1 0  0 4.01746 0 1 ]
+				AttributeBegin 
+				AttributeEnd 
 			AttributeEnd 
 			AttributeBegin 
 				Attribute "identifier" "string name" ["pPlane1"]
@@ -98,26 +106,17 @@ FrameBegin 1
 						Attribute "user" "int receivesShadows" [1]
 						Attribute "visibility" "int camera" [1] "int specular" [0] "int diffuse" [0]
 						IfBegin "!defined(user:shader_bindingstrength) || $user:shader_bindingstrength <= 0" 
-							Surface "simpleTexture" "float Kd" [0.8] "color surfaceColor" [0.95 0.95 0.5] "string map" ["../tex/tdcTexture.tx"] "float useAlpha" [1] "float flipS" [1] "float flipT" [0] 
+							Surface "textureManip" "float Kd" [0.8] "color surfaceColor" [0.5 0.5 0.5] "string map" ["tdcTexture.tx"] "float useAlpha" [1] "float rotate" [0] "float flipS" [1] "float flipT" [0] "float repeatS" [2] "float repeatT" [2] "float offsetS" [0.25] "float offsetT" [0.25] 
+								
 							Attribute "user" "int shader_bindingstrength" [0]
 						IfEnd 
 						TransformBegin 
-							Procedural "DelayedReadArchive" ["pPlaneShape1.job.rib"] [-5 5 -1.11022e-15 1.11022e-15 -5 5]
+							Procedural "DelayedReadArchive" ["renderman/textureManip/rib/job/pPlaneShape1.job.rib"] [-5 5 -1.11022e-15 1.11022e-15 -5 5]
 						TransformEnd 
 					AttributeEnd 
 				AttributeEnd 
 			AttributeEnd 
-			AttributeBegin 
-				Attribute "identifier" "string name" ["pointLight1"]
-				ConcatTransform [ 1 0 0 0  0 1 0 0  0 0 1 0  0 4.01746 0 1 ]
-				AttributeBegin 
-				AttributeEnd 
-			AttributeEnd 
-			AttributeBegin 
-				Attribute "identifier" "string name" ["CubeCompass"]
-				ConcatTransform [ 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1 ]
-			AttributeEnd 
 		WorldEnd 
 	ResourceEnd 
-	##streammarker 45
+	##streammarker 183
 FrameEnd 
