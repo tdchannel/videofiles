@@ -1,0 +1,99 @@
+Statistics for frame 1
+* Stats for group Task Profiling :
+    
+    task                     user    kernel  real    calls
+    REYES                    0.55    0.02    0.29    1
+    Total :                  0.55    0.02    0.29    1
+
+* Stats for group REYES (Statistics concerning REYES rendering module) :
+    Total number of u-polygons :            74280
+    Average number of u-polygons per grid : 171.547
+    
+    projected grids :                       433
+    shaded grids :                          433
+    displaced grids :                       0
+    
+    total primitives :                      1
+    efficiently rejected prims :            0
+    
+    Number of non-empty buckets :           338
+    Average # of objects per bucket :       7.01183
+    Maximum # of objects in one bucket :    17
+    
+    Total trimming operations :             0
+    
+    Maximum u-polygon area :                1.1064
+    Minimum u-polygon area :                0.76635
+    Average u-polygon area :                0.943637
+    
+    Distribution of u-polygon area
+    +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    |<=.06|<=.09|<=.12|<=.18|<=.25|<=.35|<=.50|<=.71|<=  1|<=1.4|<=  2|<=2.8|<=  4|<=5.7|>5.7 |
+    +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    |   0%|   0%|   0%|   0%|   0%|   0%|   0%|   0%|  84%|  16%|   0%|   0%|   0%|   0%|   0%|
+    +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    
+    Distribution of fragment list lengths
+    +-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    |<=  1|<=  2|<=  3|<=  4|<=  5|<=  6|<=  7|<=  8|>  8 |
+    +-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    | 100%|   0%|   0%|   0%|   0%|   0%|   0%|   0%|   0%|
+    +-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    
+    Curves grouping efficiency :     0.00 %
+
+* Stats for group Map Manager (statistics about map resources) :
+    Total number of maps used :        1
+    Total number of texture maps :     1
+    Total number of shadow maps :      0
+    Total number of environment maps : 0
+    Total number of deep shadow maps : 0
+    Total number of 'invalid' maps :   0
+    Total number of map requests :     1299
+    Texture IDs
+        ../tex/tdcTexture.tdx : 1
+    Texture stats
+    ID      Refs    Same    Search  Faults  Rate    Mipmap (min) Mipmap (max)
+    1       200 K   72.17   27.83    64     0.03         0            1
+
+* Stats for group Scene Manager (Statistics about the scene) :
+    Number of objects in the scene :    1
+    Number of attributes in the scene : 6
+    Number of transforms in the scene : 5
+
+* Stats for group Memory Profiling :
+    
+    item                       current   peak   overall peak
+    unprocessed gprim              0       0       0
+    gprim                          0    5600    1680
+    gprim (polygons)               0      15 K    14 K
+    gprim (subdiv)                 0       0       0
+    gprim (curves)                 0       0       0
+    gprim variables                0      26 K    12 K
+    particles                      0       0       0
+    topology data                  0       0       0
+    grid                           0     268 K   250 K
+    shaded grid                    0      11 K  8816
+    grid AOV                       0     233 K   229 K
+    texture objects              640     640     640
+    texture cache               1049 K  1049 K   901 K
+    hider and visible points       0     401 K   311 K
+    image data                     0     993 K   954 K
+    buffered display data          0       0       0
+    shader code                 1593    3920    3920
+    shader instance             4044    6140    6140
+    shader variables               0      73 K     0
+    attributes                   578    1631    1631
+    transform                   2220    2516    2516
+    subsurface                     0       0       0
+    point based occlusion          0       0       0
+    point cloud                    0       0       0
+    photon map                     0       0       0
+    inline archive                 0       0       0
+    misc                           0      88      88
+    Total :                     1058 K  3090 K  2697 K
+    
+    Peak VM size     : 0 K
+    Peak resident    : 0 K
+    Peak from malloc : 7679 K
+

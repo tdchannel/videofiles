@@ -1,0 +1,128 @@
+##RenderMan RIB
+#Created by RenderMan for Maya 4.0.3 (Sep 14 2011 21:54:12 @958014) Pro
+#Wed Apr 25 20:09:39 PDT 2012
+version 3.04
+FrameBegin 1
+	Identity 
+	Option "user" "string pass_id" ["perspShape_Final"] "string pass_phase" ["/Job/Frames/Images"] "string pass_class" ["Final"] "string pass_flavor" [""] "string pass_crew" [""] "string pass_camera_name" ["perspShape"] "string pass_camera_flavor" [""] "int pass_features_trace" [0]
+	Option "trace" "int maxdepth" [10]
+	PixelSamples 4 4
+	Option "limits" "int[2] bucketsize" [16 16]
+	Option "limits" "int gridsize" [256]
+	Option "limits" "color zthreshold" [0.996 0.996 0.996]
+	Option "limits" "color othreshold" [0.996 0.996 0.996]
+	Option "limits" "float vprelativeshadingrate" [1]
+	Option "limits" "int texturememory" [10240]
+	Option "limits" "int deepshadowtiles" [1000]
+	Option "limits" "int deepshadowmemory" [40960]
+	Option "limits" "int brickmemory" [10240]
+	Option "limits" "int geocachememory" [30720]
+	Option "limits" "int proceduralmemory" [0]
+	Option "statistics" "int endofframe" [0]
+	Option "statistics" "string filename" ["stdout"]
+	Option "statistics" "string xmlfilename" [""]
+	Option "searchpath" "string archive" ["/Users/rudy/Desktop/TDChannel/videos/pipeline/json/:@"]
+	Option "searchpath" "string display" ["${RMSTREE}/bin:@"]
+	Option "searchpath" "string procedural" ["${RMSTREE}/lib/plugins:@"]
+	Option "searchpath" "string shader" ["/Users/rudy/Desktop/TDChannel/videos/pipeline/json/:${RMSTREE}/lib/shaders/:@"]
+	Option "searchpath" "string texture" ["/Users/rudy/Desktop/TDChannel/videos/pipeline/json/:${RMSTREE}/lib/textures/:@"]
+	Option "searchpath" "string serverarchive" ["/Users/rudy/Desktop/TDChannel/videos/pipeline/json/:.:@"]
+	Option "searchpath" "string serverdisplay" ["/Users/rudy/Desktop/TDChannel/videos/pipeline/json/:.:@"]
+	Option "searchpath" "string serverprocedural" ["${RMSTREE}/lib/plugins:@"]
+	Option "searchpath" "string servershader" ["/Users/rudy/Desktop/TDChannel/videos/pipeline/json/:${RMSTREE}/lib/shaders/:@"]
+	Option "searchpath" "string servertexture" ["/Users/rudy/Desktop/TDChannel/videos/pipeline/json/:${RMSTREE}/lib/textures/:@"]
+	Option "searchpath" "string dirmap" [""]
+	CropWindow 0 1 0 1
+	Hider "hidden" "int jitter" [1] "int sigma" [0] "float sigmablur" [1]
+	Format 640 480 1
+	Display "renderman/simpleTexture/images/simpleTexture.tif" "framebuffer" "rgba" "string filter" ["catmull-rom"] "float[2] filterwidth" [2 2] "int[4] quantize" [0 255 0 255] "float dither" [0.5] "float[2] exposure" [1 1]
+	#Camera perspShape
+	Clipping 0.1 10000
+	Projection "perspective" "fov" [54.4322]
+	ScreenWindow -1 1 -0.75 0.75
+	Shutter 0 0
+	ConcatTransform [ -0.87462 0.2994 0.381313 -1.69997e-09  1.25404e-15 0.786522 -0.617562 -2.89993e-10  0.48481 0.540132 0.687907 -3.81126e-09  -1.43227e-14 -9.04029e-07 19.2837 1 ]
+	Camera "world" "float[2] shutteropening" [0 1]
+	Option "user" "color camera_bg" [0 0 0] "float camera_bga" [0]
+	ResourceBegin 
+		WorldBegin 
+			ScopedCoordinateSystem "world_ref"
+			Attribute "visibility" "int specular" [0] "int diffuse" [0] "int transmission" [0]
+			Surface "defaultsurface" 
+			Attribute "user" "int shader_bindingstrength" [0]
+			Attribute "trace" "int samplemotion" [1] "int maxdiffusedepth" [1] "int maxspeculardepth" [2] "float bias" [0.001]
+			ShadingRate 1
+			GeometricApproximation "motionfactor" 3
+			GeometricApproximation "focusfactor" 3
+			Attribute "displacementbound" "string coordinatesystem" ["shader"] "float sphere" [0]
+			AttributeBegin 
+				Attribute "identifier" "string name" ["pointLightShape1"]
+				Transform [ 1 0 0 0  0 1 0 0  0 0 1 0  0 4.01746 0 1 ]
+				Scale 1 1 -1
+				IfBegin "!defined(user:shader_bindingstrength) || $user:shader_bindingstrength <= 0" 
+					#slim shader: 00000CW0e-ldoTvJ
+					#slim light PseudoArea (light) 
+					TransformBegin
+					LightSource "pointlight" "pointLightShape1" "point from" [0 10 0] "float intensity" [200] 
+					
+					TransformEnd
+					Attribute "user" "int shader_bindingstrength" [0]
+				IfEnd 
+			AttributeEnd 
+			Illuminate "pointLightShape1" 1
+			AttributeBegin 
+				Attribute "identifier" "string name" ["groundPlane_transform"]
+				ConcatTransform [ 12 0 0 0  0 2.66454e-15 12 0  0 -1 2.22045e-16 0  0 0 0 1 ]
+				AttributeBegin 
+				AttributeEnd 
+			AttributeEnd 
+			AttributeBegin 
+				Attribute "identifier" "string name" ["Manipulator1"]
+				ConcatTransform [ 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1 ]
+			AttributeEnd 
+			AttributeBegin 
+				Attribute "identifier" "string name" ["UniversalManip"]
+				ConcatTransform [ 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1 ]
+			AttributeEnd 
+			AttributeBegin 
+			AttributeEnd 
+			AttributeBegin 
+			AttributeEnd 
+			AttributeBegin 
+			AttributeEnd 
+			AttributeBegin 
+			AttributeEnd 
+			AttributeBegin 
+				Attribute "identifier" "string name" ["pPlane1"]
+				ConcatTransform [ 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1 ]
+				AttributeBegin 
+					AttributeBegin 
+						Attribute "identifier" "string name" ["pPlaneShape1"]
+						Sides 2
+						ShadingInterpolation "smooth"
+						Attribute "user" "int receivesShadows" [1]
+						Attribute "visibility" "int camera" [1] "int specular" [0] "int diffuse" [0]
+						IfBegin "!defined(user:shader_bindingstrength) || $user:shader_bindingstrength <= 0" 
+							Surface "/Users/rudy/Desktop/TDChannel/videos/RenderMan/RSL/textureMapping/bin/simpleTexture" "float Kd" [0.8] "color surfaceColor" [0.95 0.95 0.5] "string map" ["../tex/tdcTexture.tdx"] "float useAlpha" [1] "float flipS" [1] "float flipT" [0] 
+							Attribute "user" "int shader_bindingstrength" [0]
+						IfEnd 
+						TransformBegin 
+							Procedural "DelayedReadArchive" ["pPlaneShape1.job.rib"] [-5 5 -1.11022e-15 1.11022e-15 -5 5]
+						TransformEnd 
+					AttributeEnd 
+				AttributeEnd 
+			AttributeEnd 
+			AttributeBegin 
+				Attribute "identifier" "string name" ["pointLight1"]
+				ConcatTransform [ 1 0 0 0  0 1 0 0  0 0 1 0  0 4.01746 0 1 ]
+				AttributeBegin 
+				AttributeEnd 
+			AttributeEnd 
+			AttributeBegin 
+				Attribute "identifier" "string name" ["CubeCompass"]
+				ConcatTransform [ 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1 ]
+			AttributeEnd 
+		WorldEnd 
+	ResourceEnd 
+	##streammarker 45
+FrameEnd 
