@@ -1,0 +1,72 @@
+global proc AEtdcMddReadTemplate( string $nodeName )
+{
+    editorTemplate -beginScrollLayout;
+
+    editorTemplate -beginLayout "MDD File" -collapse 0;
+    //editorTemplate -addControl "mddFile";
+    editorTemplate -callCustom "mddFileLoad" "mddFileRefresh" "";
+    editorTemplate -addControl "offset";
+    editorTemplate -addControl "cycle";
+
+    editorTemplate -endLayout;
+
+    AEdependNodeTemplate $nodeName;
+
+    editorTemplate -addExtraControls;
+    editorTemplate -endScrollLayout;
+}
+
+global proc mddFileLoad(string $attribute) 
+{
+    print ("############\n"+$attribute+" Load\n");
+
+    setUITemplate -pst attributeEditorTemplate;
+    
+    columnLayout -rowSpacing 4;
+
+    rowLayout -nc 3 -cw 2 210;
+    
+    string $desc = "Browse for a compiled RenderMan shader (slo file)...";
+    text -l "Mdd File"  -ann $desc lbl0;
+    string $widget = `textField -ann $desc txt0`;
+    //textField -e -cc ("AERenderManShaderLoadCB " + $node + 
+    //                    ".shadername " + $widget + " \"\" \"\"" ) $widget;
+
+    //textField -e -fi $shadername $widget;
+
+    string $nodenm[];
+    tokenize($attribute, ".", $nodenm);
+
+    string $node = $nodenm[0];
+    string $mddFileAttr = ($node + ".mddFile");
+
+    iconTextButton -i1 "navButtonBrowse.xpm"
+        //-en $enableReload
+	    -w 60 -h 20
+	    -ann $desc
+	    -c ("tdcBrowseMddFile(\"" + $attribute + "\");") 
+	    btn0;
+
+    connectControl -fileName $widget $mddFileAttr ;
+    setParent ..;
+    rowLayout -nc 1 -cal 1 "right";
+    button -label "Reload";
+    setParent ..;
+    setUITemplate -ppt;
+}
+
+global proc mddFileRefresh(string $attribute) 
+{
+    print ($attribute+" refresh\n");
+}
+
+global proc tdcBrowseMddFile(string $node)
+{
+    string $mddFileAttr = ($node + "mddFile");
+
+    string $singleFilter = "Mdd File (*.mdd)";
+    string $result[] = `fileDialog2 -fm 1 -fileFilter $singleFilter -dialogStyle 2`;
+    if (size($result) > 0) {
+        setAttr $mddFileAttr -type "string" $result[0];
+    }
+}
