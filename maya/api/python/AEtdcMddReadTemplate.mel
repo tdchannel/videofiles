@@ -50,14 +50,30 @@ global proc mddFileLoad(string $attribute)
     connectControl -fileName $widget $mddFileAttr ;
     setParent ..;
     rowLayout -nc 1 -cal 1 "right";
-    button -label "Reload";
+    button -label "Reload" -c ("tdcMddReloadFile(\""+$attribute+ "\");");
     setParent ..;
     setUITemplate -ppt;
 }
 
+global proc tdcMddReloadFile(string $attribute)
+{
+    string $nodenm[];
+    tokenize($attribute, ".", $nodenm);
+    //print "reloading\n";
+    string $node = $nodenm[0];
+    string $origFile = `tdcMddRead -q -f $node`;
+    int $origCycle = `tdcMddRead -q -c $node`;
+    int $origOffset = `tdcMddRead -q -o $node`;
+   
+    string $deformShape[] = `listConnections -sh 1 ($node+".outputGeometry")`;
+
+    delete $node;
+    tdcMddRead  -o $origOffset -c $origCycle -f $origFile $deformShape[0];
+}
+
 global proc mddFileRefresh(string $attribute) 
 {
-    print ($attribute+" refresh\n");
+    //print ($attribute+" refresh\n");
 }
 
 global proc tdcBrowseMddFile(string $node)

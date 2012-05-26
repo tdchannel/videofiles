@@ -32,7 +32,7 @@ class tdcMddRead(OMPx.MPxDeformerNode):
         self.fileHandle = None
 
     def loadData(self,fileName,frame,offset,cycle):
-        if fileName != self.mddFileVal:
+        if not self.fileHandle and fileName != self.mddFileVal:
             self.deltas = {}
             self.mddFileVal = fileName
             self.fileHandle = open(fileName, 'rb')
@@ -40,7 +40,7 @@ class tdcMddRead(OMPx.MPxDeformerNode):
             self.times = unpack((">%df" % self.frames), self.fileHandle.read(self.frames * 4))
         
         #if frame not in self.deltas.keys() and not self.fileHandle.closed:
-        if not self.fileHandle.closed:
+        if self.fileHandle and not self.fileHandle.closed:
             headerOffset = 8 + (self.frames * 4)
            
             if cycle:
@@ -63,8 +63,9 @@ class tdcMddRead(OMPx.MPxDeformerNode):
                 pointList.append(point)
             
             self.deltas[frame]=pointList
-        
+
         return frame
+
 
     # deform
     def deform(self,dataBlock,geomIter,matrix,multiIndex):
@@ -149,56 +150,98 @@ class TdcMddReadCommand(OMPx.MPxCommand):
     def __init__(self):
         OMPx.MPxCommand.__init__(self)
 
-    def doIt(self,argList):
-        argData = OM.MArgDatabase(self.syntax(),argList)
-        objs = OM.MSelectionList()
-        argData.getCommandArgument(0,objs)
-        
-        
-        ageMsg = "I dont know your age"
-        if argData.isFlagSet(kTdcMddReadOffsetFlag):
-            ageMsg = "You are %s years old" % int(argData.flagArgumentDouble(kTdcMddReadOffsetFlag, 0))
+    def setFlagValues(self,
+                      argData,
+                      mfn,
+                      fileFlagSet,
+                      offsetFlagSet,
+                      cycleFlagSet):
 
-        mg = OM.MGlobal
-        mg.selectCommand(objs)
-        res = OM.MCommandResult()
-        mg.executeCommand("deformer -type %s;"%kTdcMddReadNodeName,res)
-
-
-        mar = []
-        res.getResult(mar)
-        # Create a selection list
-        selist = OM.MSelectionList()
-        # create an MObject instance
-        depNode = OM.MObject()
-        mdg = OM.MDGModifier()
-
-        # add new MDDRead to the selection list
-        selist.add(mar[0])
-        # get the first element of our selection list
-        selist.getDependNode(0,depNode)
-        # make an instance of a MFnDependencyNode class
-        mfn = OM.MFnDependencyNode(depNode)
-        mg.executeCommand("connectAttr -f time1.outTime %s.time"%mar[0]);
-
-        if argData.isFlagSet(kTdcMddReadFileFlag):
+        if fileFlagSet:
             fileArg = argData.flagArgumentString(kTdcMddReadFileFlag, 0)
             # get the plug form mddFile 
             mplug = mfn.findPlug("mddFile")
             mplug.setString(fileArg)
-
-        if argData.isFlagSet(kTdcMddReadOffsetFlag):
+        
+        if offsetFlagSet:
             offset = argData.flagArgumentInt(kTdcMddReadOffsetFlag, 0)
             # get the plug form mddFile 
             mplug = mfn.findPlug("offset")
             mplug.setInt(offset)
-
-        if argData.isFlagSet(kTdcMddReadCycleFlag):
+        
+        if cycleFlagSet:
             cycle = argData.flagArgumentBool(kTdcMddReadCycleFlag, 0)
             # get the plug form mddFile 
             mplug = mfn.findPlug("cycle")
             mplug.setBool(cycle)
 
+
+    def doIt(self,argList):
+        argData = OM.MArgDatabase(self.syntax(),argList)
+        mg = OM.MGlobal
+        # Create a selection list
+        selist = OM.MSelectionList()
+        argData.getCommandArgument(0,selist)
+        
+        # create an MObject instance
+        depNode = OM.MObject()
+        mdg     = OM.MDGModifier()
+
+        # flags
+        fileFlagSet     = argData.isFlagSet(kTdcMddReadFileFlag)
+        offsetFlagSet   = argData.isFlagSet(kTdcMddReadOffsetFlag)
+        cycleFlagSet    = argData.isFlagSet(kTdcMddReadCycleFlag)
+        
+        if argData.isQuery():
+            # get the first element of our selection list
+            selist.getDependNode(0,depNode)
+
+            # make an instance of a MFnDependencyNode class
+            mfn = OM.MFnDependencyNode(depNode)
+            if fileFlagSet:
+                mplug = mfn.findPlug("mddFile")
+                self.setResult(mplug.asString())
+                return
+            if offsetFlagSet:
+                mplug = mfn.findPlug("offset")
+                self.setResult(mplug.asInt())
+                return
+            if cycleFlagSet:
+                mplug = mfn.findPlug("cycle")
+                self.setResult(mplug.asBool())
+                return
+
+        elif argData.isEdit():
+            # get the first element of our selection list
+            selist.getDependNode(0,depNode)
+            # make an instance of a MFnDependencyNode class
+            mfn = OM.MFnDependencyNode(depNode)
+            self.setFlagValues(argData,
+                               mfn,
+                               fileFlagSet,
+                               offsetFlagSet,
+                               cycleFlagSet)
+        else:
+            mg.selectCommand(selist)
+            res = OM.MCommandResult()
+            mg.executeCommand("deformer -type %s;"%kTdcMddReadNodeName,res)
+
+
+            mar = []
+            res.getResult(mar)
+            selist.clear()
+            # add new MDDRead to the selection list
+            selist.add(mar[0])
+            # get the first element of our selection list
+            selist.getDependNode(0,depNode)
+            # make an instance of a MFnDependencyNode class
+            mfn = OM.MFnDependencyNode(depNode)
+            mg.executeCommand("connectAttr -f time1.outTime %s.time"%mar[0]);
+            self.setFlagValues(argData,
+                               mfn,
+                               fileFlagSet,
+                               offsetFlagSet,
+                               cycleFlagSet)
 
 # Creator
 def tdcMddReadCmdCreator():
@@ -214,7 +257,8 @@ def tdcMddReadSyntaxCreator():
     syntax.addFlag(kTdcMddReadCycleFlag, kTdcMddReadCycleLongFlag,
                    OM.MSyntax.kBoolean)
     syntax.addArg(OM.MSyntax.kString)
-
+    syntax.enableQuery(True)
+    syntax.enableEdit(True)
     return syntax
     
 ################################
