@@ -18,21 +18,15 @@ global proc AEtdcMddReadTemplate( string $nodeName )
 
 global proc mddFileLoad(string $attribute) 
 {
-    print ("############\n"+$attribute+" Load\n");
-
     setUITemplate -pst attributeEditorTemplate;
     
     columnLayout -rowSpacing 4;
 
     rowLayout -nc 3 -cw 2 210;
     
-    string $desc = "Browse for a compiled RenderMan shader (slo file)...";
+    string $desc = "Browse for a MDD cache ...";
     text -l "Mdd File"  -ann $desc lbl0;
     string $widget = `textField -ann $desc txt0`;
-    //textField -e -cc ("AERenderManShaderLoadCB " + $node + 
-    //                    ".shadername " + $widget + " \"\" \"\"" ) $widget;
-
-    //textField -e -fi $shadername $widget;
 
     string $nodenm[];
     tokenize($attribute, ".", $nodenm);
@@ -41,7 +35,7 @@ global proc mddFileLoad(string $attribute)
     string $mddFileAttr = ($node + ".mddFile");
 
     iconTextButton -i1 "navButtonBrowse.xpm"
-        //-en $enableReload
+        -en true 
 	    -w 60 -h 20
 	    -ann $desc
 	    -c ("tdcBrowseMddFile(\"" + $attribute + "\");") 
@@ -56,8 +50,8 @@ global proc mddFileLoad(string $attribute)
 }
 
 global proc tdcMddReloadFile(string $attribute)
-{
-    string $nodenm[];
+{ 
+     string $nodenm[];
     tokenize($attribute, ".", $nodenm);
     //print "reloading\n";
     string $node = $nodenm[0];
@@ -68,12 +62,23 @@ global proc tdcMddReloadFile(string $attribute)
     string $deformShape[] = `listConnections -sh 1 ($node+".outputGeometry")`;
 
     delete $node;
-    tdcMddRead  -o $origOffset -c $origCycle -f $origFile $deformShape[0];
+    tdcMddRead  -o $origOffset -c $origCycle -f $origFile -n $node  $deformShape[0];
 }
 
 global proc mddFileRefresh(string $attribute) 
 {
-    //print ($attribute+" refresh\n");
+    string $btxt = `iconTextButton -q -c btn0`;
+    string $ctxt = "tdcMddReloadFile(\"" + $attribute + "\");";
+    if($btxt != $ctxt)
+    {
+ 	 string $nodenm[];
+	 tokenize($attribute, ".", $nodenm);
+
+	 string $layoutname = ("AttrEd" + `nodeType $nodenm[0]` + "FormLayout");
+	 string $cmd = "deleteUI \"" + $layoutname + "\"; " + 
+                         "updateAE " + $nodenm[0] + ";";
+	 evalDeferred $cmd;
+    }
 }
 
 global proc tdcBrowseMddFile(string $node)

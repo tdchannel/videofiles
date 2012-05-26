@@ -144,6 +144,8 @@ kTdcMddReadOffsetFlag   = "-o"
 kTdcMddReadOffsetLongFlag= "-offset"
 kTdcMddReadCycleFlag    = "-c"
 kTdcMddReadCycleLongFlag= "-cycle"
+kTdcMddReadNameFlag    = "-n"
+kTdcMddReadNameLongFlag= "-name"
 
 # command
 class TdcMddReadCommand(OMPx.MPxCommand):
@@ -191,6 +193,7 @@ class TdcMddReadCommand(OMPx.MPxCommand):
         fileFlagSet     = argData.isFlagSet(kTdcMddReadFileFlag)
         offsetFlagSet   = argData.isFlagSet(kTdcMddReadOffsetFlag)
         cycleFlagSet    = argData.isFlagSet(kTdcMddReadCycleFlag)
+        nameFlagSet     = argData.isFlagSet(kTdcMddReadNameFlag)
         
         if argData.isQuery():
             # get the first element of our selection list
@@ -224,7 +227,11 @@ class TdcMddReadCommand(OMPx.MPxCommand):
         else:
             mg.selectCommand(selist)
             res = OM.MCommandResult()
-            mg.executeCommand("deformer -type %s;"%kTdcMddReadNodeName,res)
+            if nameFlagSet:
+                nodeName = argData.flagArgumentString(kTdcMddReadNameFlag, 0)
+                mg.executeCommand("deformer -type %s -n %s;"%(kTdcMddReadNodeName,nodeName),res)
+            else:
+                mg.executeCommand("deformer -type %s;"%kTdcMddReadNodeName,res)
 
 
             mar = []
@@ -256,6 +263,8 @@ def tdcMddReadSyntaxCreator():
                    OM.MSyntax.kDouble)
     syntax.addFlag(kTdcMddReadCycleFlag, kTdcMddReadCycleLongFlag,
                    OM.MSyntax.kBoolean)
+    syntax.addFlag(kTdcMddReadNameFlag, kTdcMddReadNameLongFlag,
+                   OM.MSyntax.kString)
     syntax.addArg(OM.MSyntax.kString)
     syntax.enableQuery(True)
     syntax.enableEdit(True)
