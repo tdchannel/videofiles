@@ -86,7 +86,7 @@ def initializePlugin(mobject):
     try:
         mplugin.registerCommand( kPluginCmdName, cmdCreator,syntaxCreator )
     except:
-        sys.stderr.write( "Failed to register command: %s\n" % kPluginCmdName )
+        sys.stderr.write( "Failed to register command: %s\ n" % kPluginCmdName )
         raise
 
 # Uninitialize the script plug-in
@@ -96,5 +96,5 @@ def uninitializePlugin(mobject):
         mplugin.deregisterCommand( kPluginCmdName )
     except:
         sys.stderr.write( "Failed to unregister command: %s\n" % kPluginCmdName )
-        raise
+        raise 
 

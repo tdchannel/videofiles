@@ -50,6 +50,7 @@ kPluginCmdName = "spHelloWorld"
 class scriptedCommand(MPx.MPxCommand):
 	def __init__(self):
 		MPx.MPxCommand.__init__(self)
+
 	def doIt(self,argList):
 		print "Hello World"
 
