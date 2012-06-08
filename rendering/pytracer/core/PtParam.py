@@ -9,7 +9,6 @@ class PtParamError(Exception):
         return repr(self.value)
 
 class PtParamBase():
-
     def __init__(self,name=None,value=None,parmType=None):
         self.type   = parmType if parmType else None
         self.name   = name if name else PtCommon.getRandomName("Param") 
@@ -42,7 +41,10 @@ class PtParamInt(PtParamBase):
         if type(value) == int:
             PtParamBase.setValue(self,value)
         else:
-            raise PtParamError("Tried to assign %s to PtParamInt %s"%(type(value),self.name))
+            raise PtParamError("Tried to assign %s to %s %s"%(value.__class__.__name__,
+                                                              self.__class__.__name__,
+                                                             self.name))
+
 
 class PtParamFloat(PtParamBase):
     def __init__(self,name=None,value=None):
@@ -53,10 +55,13 @@ class PtParamFloat(PtParamBase):
             self.default = value
     
     def setValue(self,value):
-        if type(value) == float:
-            PtParamBase.setValue(self,value)
+        if type(value) in [float,int]:
+            PtParamBase.setValue(self,float(value))
         else:
-            raise PtParamError("Tried to assign %s to PtParamFloat %s"%(type(value),self.name))
+            raise PtParamError("Tried to assign %s to %s %s"%(value.__class__.__name__,
+                                                              self.__class__.__name__,
+                                                             self.name))
+
 
 class PtParamPoint(PtParamBase):
     def __init__(self,name=None,value=None):

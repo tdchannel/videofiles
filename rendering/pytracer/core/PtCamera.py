@@ -1,12 +1,12 @@
 import PtCommon
-import PtNode
+import PtPlugin
 
-class PtCamera(PtNode.PtNode):
+class PtCamera(PtPlugin.PtPlugin):
     def __init__(self,name=None):
-        tmpName = name if name else PtCommon.getRandomName("BaseCam")
-        PtNode.PtNode.__init__(self,name=tmpName)
-        
-        self.nodeType = PtCommon.TDC_PLUGIN_CAMERA
+        PtPlugin.PtPlugin.__init__(self)
+        #tmpName = name if name else PtCommon.getRandomName("BaseCam")
+        self.name = self.__class__.__name__ 
+        self.type = PtCommon.TDC_PLUGIN_CAMERA
         ## Add Params
         self.addParamPoint("center",[0,0,0])
         self.addParamVector("lookAt",[0,0,1])

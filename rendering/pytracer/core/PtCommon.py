@@ -1,4 +1,4 @@
-import random
+import os,random
 
 # Data Types
 TDC_TYPE_INT        = 0x01
@@ -6,6 +6,7 @@ TDC_TYPE_FLOAT      = 0x02
 TDC_TYPE_POINT      = 0x03
 TDC_TYPE_POINT2     = 0x04
 TDC_TYPE_VECTOR     = 0x05
+
 dataTypeToStrDict   = {TDC_TYPE_INT:"int",
                        TDC_TYPE_FLOAT:"float",
                        TDC_TYPE_POINT:"point",
@@ -13,6 +14,7 @@ dataTypeToStrDict   = {TDC_TYPE_INT:"int",
                        TDC_TYPE_VECTOR:"vector"}
 #plugin Types
 TDC_PLUGIN_CAMERA   = 0x00
+rootDir= os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def dataTypeToStr(dataType):
     if dataType in dataTypeToStrDict.keys():
