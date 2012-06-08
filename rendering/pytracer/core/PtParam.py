@@ -45,7 +45,6 @@ class PtParamInt(PtParamBase):
                                                               self.__class__.__name__,
                                                              self.name))
 
-
 class PtParamFloat(PtParamBase):
     def __init__(self,name=None,value=None):
         PtParamBase.__init__(self,name=name,
@@ -61,7 +60,6 @@ class PtParamFloat(PtParamBase):
             raise PtParamError("Tried to assign %s to %s %s"%(value.__class__.__name__,
                                                               self.__class__.__name__,
                                                              self.name))
-
 
 class PtParamPoint(PtParamBase):
     def __init__(self,name=None,value=None):
@@ -102,6 +100,25 @@ class PtParamVector(PtParamBase):
         elif type(value) == list:
             # make a vector
             PtParamBase.setValue(self,PtGeom.PtVector(value))
+        else:
+            raise PtParamError("Tried to assign %s to %s %s"%(value.__class__.__name__,
+                                                              self.__class__.__name__,
+                                                             self.name))
+
+class PtParamString(PtParamBase):
+    def __init__(self,name=None,value=None):
+        PtParamBase.__init__(self,name=name,
+                             parmType=PtCommon.TDC_TYPE_STRING)
+        if value:
+            self.setValue(value)
+            self.default = value
+
+    def __str__(self):
+        return self.value
+    
+    def setValue(self,value):
+        if type(value) == str:
+            PtParamBase.setValue(self,value)
         else:
             raise PtParamError("Tried to assign %s to %s %s"%(value.__class__.__name__,
                                                               self.__class__.__name__,

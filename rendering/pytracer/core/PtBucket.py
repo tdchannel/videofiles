@@ -1,6 +1,7 @@
 
 import PtGeom
 from PtWorld import PtWorld
+import PtPixel
 
 class PtBucket():
     def  __init__(self,pos=PtGeom.PtPoint2(0,0),
@@ -9,16 +10,23 @@ class PtBucket():
         self.pos    = pos 
         self.width  = width
         self.height = height
-
+        
     def process(self,pixels):
         xres = PtWorld.options.xres.value
         yres = PtWorld.options.yres.value
+
+        self.pixels = []
+        for i in range(self.width * self.height):
+            self.pixels.append(PtPixel.PtPixel())
+
         for y in range(self.pos.y, self.pos.y+ self.height):
             for x in range(self.pos.x, self.pos.x + self.width):
                 px = pixels[(y * xres)+x]
-                px.r = (x / float(xres)) * 256
-                px.g = (y / float(yres)) * 256
-                px.b = 256
+                bpos = ((y - self.pos.y) * self.width) + (x-self.pos.x)
+                pxb = self.pixels[bpos]
+                pxb.r = px.r = (x / float(xres)) * 256
+                pxb.g = px.g = (y / float(yres)) * 256
+                pxb.b = px.b = 256
 
 class PtBucketWorker():
     def __init__(self):

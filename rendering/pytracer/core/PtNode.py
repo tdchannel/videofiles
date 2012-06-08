@@ -19,6 +19,10 @@ class PtNode():
         self.params = ins.params 
         for i in self.params:
             exec("self.%s = self.params[i]"%i)
+
+        for i in ins.methods:
+            exec("self.%s = ins.methods[i]"%i)
+        
     #
     # Public
     #
