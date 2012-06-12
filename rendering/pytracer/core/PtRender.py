@@ -34,7 +34,7 @@ def PtRender():
     bw = PtBucket.PtBucketWorker()
     bw.calculateBuckets(xres,yres,bucketSize)
     # open the driver
-    PtWorld.driver.open(PtWorld.options)
+    q = PtWorld.driver.open(PtWorld.options)
     # process buckets
     for tbucket in bw.buckets:
         tbucket.process(pixels)

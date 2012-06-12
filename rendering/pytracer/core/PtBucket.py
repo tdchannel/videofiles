@@ -24,9 +24,9 @@ class PtBucket():
                 px = pixels[(y * xres)+x]
                 bpos = ((y - self.pos.y) * self.width) + (x-self.pos.x)
                 pxb = self.pixels[bpos]
-                pxb.r = px.r = (x / float(xres)) * 256
-                pxb.g = px.g = (y / float(yres)) * 256
-                pxb.b = px.b = 256
+                pxb.r = px.r = (x / float(xres)) * 255
+                pxb.g = px.g = (y / float(yres)) * 255
+                pxb.b = px.b = 255
 
 class PtBucketWorker():
     def __init__(self):
