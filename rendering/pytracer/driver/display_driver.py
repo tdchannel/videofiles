@@ -17,8 +17,7 @@ class display_driver(PtDriver.PtDriver):
     def open(self,options):
         self.options = options
 
-        xres = self.options.xres.value
-        yres = self.options.yres.value
+
         self._launchWindow()
         #thread.start_new_thread(self._launchWindow,(xres,yres))
         self.tcpSocket = QTcpSocket()
@@ -29,16 +28,17 @@ class display_driver(PtDriver.PtDriver):
             self.tcpSocket.connectToHost(QHostAddress("0.0.0.0"), 5006)
             self.tcpSocket.waitForConnected(5000)
 
-        self.tcpSocket.waitForReadyRead()
-        # send resolution
-        txt = struct.pack("6sII","imgnfo",xres,yres)
-        self.tcpSocket.write(QByteArray(txt))
-        self.tcpSocket.waitForReadyRead()
 
     def tcpSocketConnected(self):
-        txt = "Successfully connected to Server!!!"
+        #txt = "Successfully connected to Server!!!"
+        self.xres = self.options.xres.value
+        self.yres = self.options.yres.value
+        # send resolution
+        txt = struct.pack("6sII","imgnfo",self.xres,self.yres)
         self.tcpSocket.write(QByteArray(txt))
-
+        self.tcpSocket.waitForBytesWritten()
+        
+        
     def writeBucket(self,bucket):
         bu = struct.pack("6sIIII","bucket",
                                     bucket.pos.x,
@@ -46,14 +46,13 @@ class display_driver(PtDriver.PtDriver):
                                     bucket.width,
                                     bucket.height)
         for i in bucket.pixels:
-            #print (i.r,i.g,i.b)
-            bu += struct.pack("3I",i.r,i.g,i.b)
+            bu += struct.pack("3I",int(i.r),int(i.g),int(i.b))
 
         self.tcpSocket.write(QByteArray(bu))
-        self.tcpSocket.waitForReadyRead()
+        self.tcpSocket.waitForBytesWritten()
 
     def close(self):
-        self.tcpSocket.write(QByteArray("0"))
+        self.tcpSocket.close()
 
     def _launchWindow(self):
         file = os.path.dirname(__file__)
