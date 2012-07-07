@@ -19,6 +19,10 @@ class PtPlugin():
         self.methods= {}
 
     ########## Methods ##########
+    @property
+    def numParams(self):
+        return len(self.params)
+
     def addParam(self,param,value=None,parmType=None):
         if isinstance(param,PtParam.PtParamBase):
             self.params[param.name]=param
@@ -33,6 +37,8 @@ class PtPlugin():
                 tmpParam = PtParam.PtParamVector(name=param,value=value)
             elif parmType == PtCommon.TDC_TYPE_STRING:
                 tmpParam = PtParam.PtParamString(name=param,value=value)
+            elif parmType == PtCommon.TDC_TYPE_MATRIX:
+                tmpParam = PtParam.PtParamMatrix(name=param,value=value)
             else:
                 tmpParam = PtParam.PtParamBase(name=param,value=value)
             self.params[param]=tmpParam
@@ -49,5 +55,8 @@ class PtPlugin():
     def addParamVector(self,param,value=None):
         self.addParam(param,value=value,parmType=PtCommon.TDC_TYPE_VECTOR)
     
+    def addParamMatrix(self,param,value=None):
+        self.addParam(param,value=value,parmType=PtCommon.TDC_TYPE_MATRIX)
+
     def addParamString(self,param,value=None):
         self.addParam(param,value=value,parmType=PtCommon.TDC_TYPE_STRING)

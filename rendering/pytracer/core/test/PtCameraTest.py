@@ -2,13 +2,16 @@ import os
 import unittest
 
 from .core import PtCamera
-from .core import PtParam
+from .core import PtNode
 from .core import PtGeom
+
+from .core import PtRender
 
 class PtCameraTest(unittest.TestCase):
 
     def test_instantiate(self):
-        tmp = PtCamera.PtCamera()
+        PtRender.PtBegin()
+        tmp = PtNode.PtNode("ortho_camera")
         # test setting the center
         center = [1.2,10.0,0.22]
         tmp.setParamValue("center",center)

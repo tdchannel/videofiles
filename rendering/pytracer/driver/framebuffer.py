@@ -37,9 +37,6 @@ class TcpServer(QTcpServer):
         txt = str(self.socket.readAll())
         
         txtAr = struct.unpack("6s",txt[:6])
-        #print txtAr
-        #print txt
-        #txtAr = txt.split()
        
         if txtAr[0] == "imgnfo":
             uvals = struct.unpack("II",txt[8:])
