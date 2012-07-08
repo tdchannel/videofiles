@@ -36,7 +36,8 @@ def getRandomName(baseName,hashLength=16):
     return "%s_%s"%(baseName,"".join(random.sample(all,
                                                    hashLength if hashLength < len(all) else len(all))))
 
-
+def clamp(x,mi,ma):
+    return max(mi, min(x,ma))
 
 class PtTypeError(Exception):
     def __init__(self,value):

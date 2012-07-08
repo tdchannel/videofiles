@@ -1,5 +1,6 @@
 import PtCommon
 import PtGeom
+import PtTransform
 
 class PtParamError(Exception):
     def __init__(self,value):
@@ -33,7 +34,7 @@ class PtParamInt(PtParamBase):
     def __init__(self,name=None,value=None):
         PtParamBase.__init__(self,name=name,
                            parmType=PtCommon.TDC_TYPE_INT)
-        if value:
+        if value!= None:
             self.setValue(value)
             self.default = value
     
@@ -49,7 +50,7 @@ class PtParamFloat(PtParamBase):
     def __init__(self,name=None,value=None):
         PtParamBase.__init__(self,name=name,
                            parmType=PtCommon.TDC_TYPE_FLOAT)
-        if value:
+        if value != None:
             self.setValue(value)
             self.default = value
     
@@ -65,7 +66,7 @@ class PtParamPoint(PtParamBase):
     def __init__(self,name=None,value=None):
         PtParamBase.__init__(self,name=name,
                              parmType=PtCommon.TDC_TYPE_POINT)
-        if value:
+        if value != None:
             self.setValue(value)
             self.default = value
 
@@ -100,6 +101,28 @@ class PtParamVector(PtParamBase):
         elif type(value) == list:
             # make a vector
             PtParamBase.setValue(self,PtGeom.PtVector(value))
+        else:
+            raise PtParamError("Tried to assign %s to %s %s"%(value.__class__.__name__,
+                                                              self.__class__.__name__,
+                                                             self.name))
+
+class PtParamMatrix(PtParamBase):
+    def __init__(self,name=None,value=None):
+        PtParamBase.__init__(self,name=name,
+                             parmType=PtCommon.TDC_TYPE_MATRIX)
+        if value:
+            self.setValue(value)
+            self.default = value
+
+    def __str__(self):
+        return "%s"%(self.value)
+    
+    def setValue(self,value):
+        if isinstance(value, PtTransform.PtMatrix) :
+            PtParamBase.setValue(self,value)
+        elif type(value) == list:
+            # make a vector
+            PtParamBase.setValue(self,PtTransform.PtMatrix(value))
         else:
             raise PtParamError("Tried to assign %s to %s %s"%(value.__class__.__name__,
                                                               self.__class__.__name__,

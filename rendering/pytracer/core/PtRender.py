@@ -10,7 +10,7 @@ __all__=['PtBegin','PtRender','PtEnd']
 
 def PtBegin():
     # Load Plugins
-    corePlugins = ['camera','driver']
+    corePlugins = ['camera','driver','shape']
     
     print "loading Plugins:"
     for dir in corePlugins:

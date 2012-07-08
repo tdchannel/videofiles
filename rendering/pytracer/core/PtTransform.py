@@ -150,13 +150,41 @@ class PtTransform():
         self.mInv = copy.copy(self.m)
         self.mInv.invert
 
+    def __mul__(self,other):
+        if other.__class__.__name__ == "PtTransform":
+            ret = PtMatrix()
+            a = self.m.m
+            b = other.m.m
+            
+            ret[0]  = a[0]*b[0] + a[1]*b[4] + a[2]*b[8] + a[3]*b[12]
+            ret[1]  = a[0]*b[1] + a[1]*b[5] + a[2]*b[9] + a[3]*b[13]
+            ret[2]  = a[0]*b[2] + a[1]*b[6] + a[2]*b[10] + a[3]*b[14]
+            ret[3]  = a[0]*b[3] + a[1]*b[7] + a[2]*b[11] + a[3]*b[15]
+            
+            ret[4]  = a[4]*b[0] + a[5]*b[4] + a[6]*b[8] + a[7]*b[12]
+            ret[5]  = a[4]*b[1] + a[5]*b[5] + a[6]*b[9] + a[7]*b[13]
+            ret[6]  = a[4]*b[2] + a[5]*b[6] + a[6]*b[10] + a[7]*b[14]
+            ret[7]  = a[4]*b[3] + a[5]*b[7] + a[6]*b[11] + a[7]*b[15]
+            
+            ret[8]  = a[8]*b[0] + a[9]*b[4] + a[10]*b[8] + a[11]*b[12]
+            ret[9]  = a[8]*b[1] + a[9]*b[5] + a[10]*b[9] + a[11]*b[13]
+            ret[10] = a[8]*b[2] + a[9]*b[6] + a[10]*b[10] + a[11]*b[14]
+            ret[11] = a[8]*b[3] + a[9]*b[7] + a[10]*b[11] + a[11]*b[15]
+            
+            ret[12] = a[12]*b[0] + a[13]*b[4] + a[14]*b[8] + a[15]*b[12]
+            ret[13] = a[12]*b[1] + a[13]*b[5] + a[14]*b[9] + a[15]*b[13]
+            ret[14] = a[12]*b[2] + a[13]*b[6] + a[14]*b[10] + a[15]*b[14]
+            ret[15] = a[12]*b[3] + a[13]*b[7] + a[14]*b[11] + a[15]*b[15]
+            
+            return PtTransform(ret)
+
 def PiTranslate(*args):
     if len(args) > 0 and type(args[0]) == list:
         vec = args[0]
         x = float(vec[0])
         y = float(vec[1])
         z = float(vec[2])
-    elif len(args) and args[0].__class__.__name__ == "PtVector":
+    elif len(args) and args[0].__class__.__name__ in["PtVector",'PtPoint']:
         vec = args[0]
         x = vec.x
         y = vec.y

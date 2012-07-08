@@ -1,4 +1,13 @@
 
+
+class PtPointError(Exception):
+    def __init__(self,value):
+        self.value = value
+    
+    def __str__(self):
+        return repr(self.value)
+
+
 class PtPoint():
     def __init__(self,x=0,y=0,z=0):
         if type(x) == list and len(x) >1:
@@ -12,6 +21,110 @@ class PtPoint():
             self.z = z
 
         self.w = 1
+  
+    def transform(self,xf,ret=False):
+        m = xf.m.m
+        x = self.x; y=self.y; z=self.z;
+        
+        xp = m[0]*x + m[1]*y + m[2]*z + m[3]
+        yp = m[4]*x + m[5]*y + m[6]*z + m[7]
+        zp = m[8]*x + m[9]*y + m[10]*z+ m[11]
+        wp = m[12]*x+ m[13]*y+ m[14]*z+ m[15]
+        
+        if wp == 0:
+            raise PtPointError("Error transforming point")
+
+        if wp == 1.:
+            return self.__class__(xp,yp,zp)
+        else:
+            return self.__class__(xp/w,yp/w,zp/w)
+
+    #
+    # Add two points
+    #
+    def __add__(self,other):
+        if other.__class__.__name__ in["PtPoint","PtVector"]:
+            self.x += other.x
+            self.y += other.y
+            self.z += other.z
+        elif type(other) in [int,float]:
+            self.x += other
+            self.y += other
+            self.z += other
+        else:
+            raise PtPointError("Can not add to %s"%type(other))
+        return self
+
+    def __sub__(self,other):
+        if other.__class__.__name__ in["PtPoint","PtVector"]:
+            self.x -= other.x
+            self.y -= other.y
+            self.z -= other.z
+        elif type(other) in [int,float]:
+            self.x -= other
+            self.y -= other
+            self.z -= other
+        else:
+            raise PtPointError("Can not subtract to %s"%type(other))
+
+        return self
+
+    def __mul__(self,other):
+        if other.__class__.__name__ in["PtPoint","PtVector"]:
+            self.x *= other.x
+            self.y *= other.y
+            self.z *= other.z
+        elif type(other) in [int,float]:
+            self.x *= other
+            self.y *= other
+            self.z *= other
+        else:
+            raise PtPointError("Can not multiply to %s"%type(other))
+
+        return self
+
+    #
+    # compare two points
+    #
+    # less than
+    def __lt__(self, other):
+        if other.x < self.x and other.y < self.y and other.z < self.z:
+            return True
+        else:
+            return False
+
+    # less than or equal
+    def __le__(self,other):
+        if other.x <= self.x and other.y <= self.y and other.z <= self.z:
+            return True
+        else:
+            return False
+
+    # equal
+    def __eq__(self, other):
+        if other.x == self.x and other.y == self.y and other.z == self.z:
+            return True
+        else:
+            return False
+    # not equal
+    def __ne__(self,other):
+        if other.x != self.x and other.y != self.y and other.z != self.z:
+            return True
+        else:
+            return False
+    # greater than or equal
+    def __gt__(self, other):
+        if other.x >= self.x and other.y >= self.y and other.z >= self.z:
+            return True
+        else:
+            return False
+    # greater than
+    def __ge__(self, other):
+        if other.x > self.x and other.y > self.y and other.z > self.z:
+            return True
+        else:
+            return False
+
 
     def __str__(self):
         return "[%s,%s,%s]"%(self.x,self.y,self.z)
@@ -22,3 +135,47 @@ class PtVector(PtPoint):
     def __init__(self,x=0,y=0,z=0):
         PtPoint.__init__(self,x=x,y=y,z=z)
         self.w = 0 
+
+class PtBBox():
+    def __init__(self,min=PtPoint(),max=PtPoint(),center=PtPoint()):
+        self.min = min
+        self.max = max
+        self.center = center
+    
+    def __calculateCenter(self):
+       self.min + (self.max * 0.5)
+
+    def expandToPoint(self, point):
+        if point < self.min:
+            self.min = point
+        if point > self.max:
+            self.max = point
+
+    def expandToBBox(self,PtBBox):
+        pass
+
+
+class PtRay():
+    def __init__(self,origin=PtPoint(),direction=PtVector(0,0,1)):
+        self.o = origin
+        self.d = direction
+        self.mint = 0.
+        self.maxt = 0.
+        
+    def transform(self,xform,ret=False):
+        rout = self.__class__()
+        rout.o = self.o.transform(xform)
+        rout.d = self.d.transform(xform)
+        if ret:
+            return rout
+        else:
+            self.o = rout.o
+            self.d = rout.d
+
+    def offset(self,arg):
+        self.d *= arg
+        self.o += self.d
+        return self.o
+
+    def __str__(self):
+        return "o %s\nd %s"%(self.o,self.d)

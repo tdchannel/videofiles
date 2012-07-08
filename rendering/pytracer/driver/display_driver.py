@@ -46,11 +46,8 @@ class display_driver(PtDriver.PtDriver):
                                     bucket.width,
                                     bucket.height)
         for i in bucket.pixels:
-<<<<<<< HEAD
-            bu += struct.pack("3I",i.r,i.g,i.b)
-=======
+            #bu += struct.pack("3I",i.r,i.g,i.b)
             bu += struct.pack("3I",int(i.r),int(i.g),int(i.b))
->>>>>>> 708c363a3eb6e52d4bb9a62fdb18ed4481975d75
 
         self.tcpSocket.write(QByteArray(bu))
         self.tcpSocket.waitForBytesWritten()

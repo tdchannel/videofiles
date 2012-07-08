@@ -6,6 +6,7 @@ class PtWorld():
     cameras=[]
     options = None
     driver  = None
+    shapes  = []
 
     @classmethod
     def initialize(self):
