@@ -3,6 +3,7 @@ from PtPluginManager import PtPluginManager
 import PtPlugin
 import PtCommon
 import PtParam 
+import pytracer.core.PtWorld as PtWorld
 
 class PtNode():
 
@@ -22,7 +23,12 @@ class PtNode():
 
         for i in ins.methods:
             exec("self.%s = ins.methods[i]"%i)
-        
+
+        # add to the world
+        if ins.type == PtCommon.TDC_PLUGIN_CAMERA:
+            PtWorld.cameras.append(self)
+        elif ins.type == PtCommon.TDC_PLUGIN_SHAPE:
+            PtWorld.shapes.append(self)
     #
     # Public
     #

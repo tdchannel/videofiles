@@ -5,7 +5,7 @@ from .core import PtShape
 from .core import PtGeom
 from .core import PtMath
 from .core import PtTransform
-from .core.PtWorld import PtWorld
+import core.PtWorld as PtWorld
 
 class sphere(PtShape.PtShape):
     def __init__(self,name=None):
@@ -16,7 +16,6 @@ class sphere(PtShape.PtShape):
         self.addParamFloat("zmin", -1.)
         self.addParamFloat("zmax",  1.)
         
-        PtWorld.shapes.append(self)
 
     def prepareValues(self):
         radius = self.params['radius'].value
@@ -77,27 +76,27 @@ class sphere(PtShape.PtShape):
         # multiply transforms
         xf *= xpoint
         # get a local ray
-        lray = ray.transform(xf,ret=True)
- 
-        A = lray.d.x*lray.d.x + lray.d.y*lray.d.y + lray.d.z * lray.d.z
-        B = 2 * (lray.d.x*lray.o.x + lray.d.y*lray.o.y + lray.d.z*lray.o.z)
-        C = lray.o.x*lray.o.x + lray.o.y*lray.o.y + lray.o.z*lray.o.z - radius*radius
+        ray.transform(xf)
+
+        A = ray.d.x*ray.d.x + ray.d.y*ray.d.y + ray.d.z * ray.d.z
+        B = 2 * (ray.d.x*ray.o.x + ray.d.y*ray.o.y + ray.d.z*ray.o.z)
+        C = ray.o.x*ray.o.x + ray.o.y*ray.o.y + ray.o.z*ray.o.z - radius*radius
         
         hit, t0, t1 = PtMath.quadratic(A,B,C)
         if not hit:
             return False
         #  Compute intersection distance along ray
-        if t0 > lray.maxt or t1 < lray.mint:
+        if t0 > ray.maxt or t1 < ray.mint:
             return False
 
         thit = t0
-        if t0 < lray.mint:
+        if t0 < ray.mint:
             thit = t1
-            if thit > lray.maxt:
+            if thit > ray.maxt:
                 return False
 
         # Compute sphere hit position and $\phi
-        phit = lray.offset(thit)
+        phit = ray.offset(thit)
         phit = math.atan2(phit.y,phit.x)
         if phi < 0.:
             phi += 2. * path.pi 
@@ -112,7 +111,7 @@ class sphere(PtShape.PtShape):
                 return False
             thit = t1
         # Compute sphere hit position and $\phi$
-            phit = lray.offset(thit)
+            phit = ray.offset(thit)
             phi = math.atan2(phit.y,phit.x)
             if phi < 0.:
                 phi += 2. * math.pi

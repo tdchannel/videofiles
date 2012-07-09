@@ -1,5 +1,6 @@
 from core.PtRender import *
-from core.PtWorld import PtWorld
+import core.PtWorld as PtWorld
 from core.PtNode import PtNode
 from core.PtGeom import *
+
 

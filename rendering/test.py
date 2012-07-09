@@ -4,16 +4,18 @@ from pytracer import *
 
 PtBegin()
 
-#cam = PtNode("ortho_camera")
 options = PtWorld.getOptions()
+#print PtWorld
+#print "XX"
+cam = PtNode("ortho_camera")
 
 sph = PtNode("sphere")
-sph.center.setValue([10,1,2])
+#sph.center.setValue([10,1,2])
 sph.intersectP(PtRay())
-#options.xres.setValue(1280)
-#options.yres.setValue(720)
-#options.bucketSize.setValue(64)
-#PtWorld.driver = PtNode("display_driver")
-#PtRender()
+options.xres.setValue(200)
+options.yres.setValue(200)
+#options.bucketSize.setValue(10)
+PtWorld.driver = PtNode("display_driver")
+PtRender()
 
 PtEnd()

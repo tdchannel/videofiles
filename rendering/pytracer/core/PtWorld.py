@@ -1,19 +1,27 @@
 from PtPluginManager import PtPluginManager
-from PtNode import PtNode
 
-class PtWorld():
+#class PtWorld():
+cameras=[]
+options = None
+driver  = None
+shapes  = []
 
-    cameras=[]
-    options = None
-    driver  = None
-    shapes  = []
 
-    @classmethod
-    def initialize(self):
-        PtPluginManager.loadPlugin("PtOptions")
-        self.options = PtNode("PtOptions")
-        self.driver  = PtNode("jpeg_driver")
+#@classmethod
+def initialize():
+    from PtNode import PtNode
+    global options, driver, cameras, shapes
+    PtPluginManager.loadPlugin("PtOptions")
+    options = PtNode("PtOptions")
+    driver  = PtNode("jpeg_driver")
+    cameras = []
+    shapes = []
 
-    @classmethod
-    def getOptions(self):
-        return self.options
+#@classmethod
+def getOptions():
+    return options
+
+#@classmethod
+def getCameras():
+    return cameras
+

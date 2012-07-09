@@ -2,7 +2,7 @@ import PIL.Image as Image
 
 from .core import PtCommon
 from .core import PtDriver
-from .core.PtWorld import PtWorld
+import core.PtWorld as PtWorld
 
 class jpeg_driver(PtDriver.PtDriver):
     def __init__(self,name=None):

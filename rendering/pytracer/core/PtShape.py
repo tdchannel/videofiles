@@ -1,6 +1,7 @@
 import PtCommon
 import PtPlugin
 import PtTransform
+import pytracer.core.PtWorld as PtWorld
 
 class PtShape(PtPlugin.PtPlugin):
     def __init__(self,name=None):
@@ -16,6 +17,8 @@ class PtShape(PtPlugin.PtPlugin):
         self.methods = {"createRay":self.createRay,
                         "canIntersect":self.canIntersect,
                         "intersectP":self.intersectP}
+
+    
     def createRay(self):
         pass
 

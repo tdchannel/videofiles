@@ -33,11 +33,21 @@ class PtPoint():
         
         if wp == 0:
             raise PtPointError("Error transforming point")
-
-        if wp == 1.:
-            return self.__class__(xp,yp,zp)
+        
+        if ret:
+            if wp == 1.:
+                return self.__class__(xp,yp,zp)
+            else:
+                return self.__class__(xp/w,yp/w,zp/w)
         else:
-            return self.__class__(xp/w,yp/w,zp/w)
+            if wp == 1.:
+                self.x = xp
+                self.y = yp
+                self.z = zp
+            else:
+                self.x = xp/w
+                self.y = yp/w
+                self.z = zp/w
 
     #
     # Add two points
@@ -136,6 +146,21 @@ class PtVector(PtPoint):
         PtPoint.__init__(self,x=x,y=y,z=z)
         self.w = 0 
 
+    def transform(self,xf,ret=False):
+        m = xf.m.m
+        x = self.x; y=self.y; z=self.z;
+        
+        xp = m[0]*x + m[1]*y + m[2]*z + m[3]
+        yp = m[4]*x + m[5]*y + m[6]*z + m[7]
+        zp = m[8]*x + m[9]*y + m[10]*z+ m[11]
+        if ret:       
+            return self.__class__(xp,yp,zp)
+        else:
+            self.x = xp
+            self.y = yp
+            self.z = zp
+
+
 class PtBBox():
     def __init__(self,min=PtPoint(),max=PtPoint(),center=PtPoint()):
         self.min = min
@@ -164,18 +189,15 @@ class PtRay():
         
     def transform(self,xform,ret=False):
         rout = self.__class__()
-        rout.o = self.o.transform(xform)
-        rout.d = self.d.transform(xform)
+        rout.o = self.o.transform(xform,True)
+        rout.d = self.d.transform(xform,True)
+        
         if ret:
             return rout
         else:
             self.o = rout.o
             self.d = rout.d
 
-    def offset(self,arg):
-        self.d *= arg
-        self.o += self.d
-        return self.o
 
     def __str__(self):
         return "o %s\nd %s"%(self.o,self.d)

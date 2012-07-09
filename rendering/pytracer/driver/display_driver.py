@@ -7,7 +7,7 @@ from PyQt4.QtNetwork import QTcpSocket, QHostAddress
 
 from .core import PtCommon
 from .core import PtDriver
-from .core.PtWorld import PtWorld
+import core.PtWorld as PtWorld
 
 class display_driver(PtDriver.PtDriver):
     def __init__(self,name=None):

@@ -1,10 +1,11 @@
 import os,array
 
 from PtPluginManager import PtPluginManager
-from PtWorld import PtWorld
+import PtWorld
 import PtPixel
 import PtCommon
 import PtBucket
+import PtProgressBar
 
 __all__=['PtBegin','PtRender','PtEnd']
 
@@ -35,11 +36,14 @@ def PtRender():
     bw.calculateBuckets(xres,yres,bucketSize)
     # open the driver
     q = PtWorld.driver.open(PtWorld.options)
+    progress = PtProgressBar.PtProgressBar(len(bw.buckets))
     # process buckets
-    for tbucket in bw.buckets:
+    for i,tbucket in enumerate(bw.buckets):
         tbucket.process(pixels)
-        PtWorld.driver.writeBucket(tbucket)   
-
+        PtWorld.driver.writeBucket(tbucket)
+        progress.increment(i)
+    progress.setValue(100)
+    print "\n"
     PtWorld.driver.close()
 
 
