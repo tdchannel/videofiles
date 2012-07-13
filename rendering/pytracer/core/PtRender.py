@@ -57,6 +57,7 @@ def PtRender():
     progress = PtProgressBar.PtProgressBar(len(bw.buckets))
     # process buckets
     for i,tbucket in enumerate(bw.buckets):
+        PtWorld.driver.prepareBucket(tbucket)
         tbucket.process(pixels)
         PtWorld.driver.writeBucket(tbucket)
         timeNow = datetime.datetime.now()

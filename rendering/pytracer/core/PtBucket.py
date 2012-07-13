@@ -10,14 +10,15 @@ class PtBucket():
         self.pos    = pos 
         self.width  = width
         self.height = height
+
+        self.pixels =[]
+        for i in range(self.width * self.height):
+            self.pixels.append(PtPixel.PtPixel())
         
     def process(self,pixels):
         xres = PtWorld.options.xres.value
         yres = PtWorld.options.yres.value
 
-        self.pixels =[]# [PtPixel.PtPixel()]*self.width * self.height
-        for i in range(self.width * self.height):
-            self.pixels.append(PtPixel.PtPixel())
 
         cam = PtWorld.cameras[0]
         for y in range(self.pos.y, self.pos.y+ self.height):

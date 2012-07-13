@@ -41,7 +41,28 @@ class display_driver(PtDriver.PtDriver):
         self.tcpSocket.write(QByteArray(txt))
         self.tcpSocket.waitForBytesWritten()
         
-        
+
+    def prepareBucket(self,bucket):
+        bu = struct.pack("6sIIII","bucket",
+                                    bucket.pos.x,
+                                    bucket.pos.y,
+                                    bucket.width,
+                                    bucket.height)
+
+        for i,p in enumerate(bucket.pixels):
+
+
+            if i < bucket.width or \
+            i > ((bucket.height * bucket.width) - bucket.width) or \
+            (i % bucket.width) == 0 or\
+            (((i+1) % bucket.width) + bucket.width) == bucket.width:
+                bu += struct.pack("3I",255,255,255)
+            else:
+                bu += struct.pack("3I",0,0,0)
+
+        self.tcpSocket.write(QByteArray(bu))
+        self.tcpSocket.waitForBytesWritten()
+    
     def writeBucket(self,bucket):
         bu = struct.pack("6sIIII","bucket",
                                     bucket.pos.x,

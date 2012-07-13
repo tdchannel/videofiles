@@ -50,15 +50,21 @@ class TcpServer(QTcpServer):
                 px.fill(Qt.black)
                 lbl = QtGui.QLabel()
                 lbl.setPixmap(px)
+                layout = self.parent.layout()
                 self.parent.layout().addWidget(lbl)
-                
+
             elif txtAr[0] == "bucket":
+                layout = self.parent.layout()
+                lbl = layout.currentWidget()
+
                 uvals = struct.unpack("IIII",txt[:16])
+                if uvals[0] == 0 and uvals[1] == 0:
+                    lbl.pixmap().fill(Qt.black)
+                    
                 txt = txt[16:]
                 upack = 3*uvals[2]*uvals[3]
                 pixels = struct.unpack("%dI"%upack,txt[:upack*4])
                 txt = txt[upack*4:]
-                lbl = self.parent.layout().currentWidget()
                 px = lbl.pixmap()
                 img = px.toImage()
 
