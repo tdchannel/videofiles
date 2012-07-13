@@ -50,10 +50,10 @@ class PtProgressBar:
         self.width = width
         self.color = color
        
-    def setValue(self,percent):
+    def setValue(self,percent,msg=""):
         stars = (self.fill_char * max(1, int( (percent/100.0)*self.width) ) )
         spaces= (" "*(self.width-len(stars)))
-        self.prog_bar = "[%s] %s%%" % ((stars+spaces),percent)
+        self.prog_bar = "[%s] %s%% %s" % ((stars+spaces),percent,msg)
         if sys.platform.lower().startswith('win'):
             set_color(WINDOWS_COLORS[self.color])
             sys.stdout.write( self.__str__()+'\r')
@@ -61,9 +61,9 @@ class PtProgressBar:
         else:
             print self, chr(27) + '[A'
         
-    def increment(self, newVal):
+    def increment(self, newVal,msg=""):
         percent = int((newVal/float(self.steps))*100)
-        self.setValue(percent)
+        self.setValue(percent,msg = msg)
         
     def __str__(self):
         #if rt.OsTag() == "windows":

@@ -2,19 +2,21 @@
 
 from pytracer import *
 
-PtBegin()
+PtBegin(2)
 
 options = PtWorld.getOptions()
-#print PtWorld
-#print "XX"
-cam = PtNode("ortho_camera")
 
-sph = PtNode("sphere")
-#sph.center.setValue([10,1,2])
-sph.intersectP(PtRay())
+options.verbose.setValue(2)
 options.xres.setValue(200)
 options.yres.setValue(200)
 #options.bucketSize.setValue(10)
+
+cam = PtNode("ortho_camera")
+
+sph = PtNode("sphere")
+sph.radius.setValue(50)
+#sph.center.setValue([20,20,10])
+
 PtWorld.driver = PtNode("display_driver")
 PtRender()
 

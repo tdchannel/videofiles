@@ -1,8 +1,8 @@
 import os
 import unittest
 
-from .core.PtNode import PtNode 
-from .core import PtParam 
+from pytracer.core.PtNode import PtNode 
+from pytracer.core import PtParam 
 
 class PtNodeTest(unittest.TestCase):
 

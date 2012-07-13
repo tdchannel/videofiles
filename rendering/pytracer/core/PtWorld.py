@@ -13,7 +13,7 @@ def initialize():
     global options, driver, cameras, shapes
     PtPluginManager.loadPlugin("PtOptions")
     options = PtNode("PtOptions")
-    driver  = PtNode("jpeg_driver")
+    #driver  = PtNode("jpeg_driver")
     cameras = []
     shapes = []
 

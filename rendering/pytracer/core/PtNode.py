@@ -3,7 +3,7 @@ from PtPluginManager import PtPluginManager
 import PtPlugin
 import PtCommon
 import PtParam 
-import pytracer.core.PtWorld as PtWorld
+import PtWorld as PtWorld
 
 class PtNode():
 

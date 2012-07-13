@@ -16,17 +16,20 @@ class display_driver(PtDriver.PtDriver):
 
     def open(self,options):
         self.options = options
-
-
-        self._launchWindow()
-        #thread.start_new_thread(self._launchWindow,(xres,yres))
         self.tcpSocket = QTcpSocket()
-        QObject.connect(self.tcpSocket, SIGNAL("connected()"), self.tcpSocketConnected)
+        # try to connect to the server
+        self.tcpSocket.connectToHost(QHostAddress("0.0.0.0"), 5006)
+        self.tcpSocket.waitForConnected(2000)
 
-        #print "connecting now"
-        while self.tcpSocket.state() != 3:
-            self.tcpSocket.connectToHost(QHostAddress("0.0.0.0"), 5006)
-            self.tcpSocket.waitForConnected(5000)
+        if self.tcpSocket.state() != 3:
+            self._launchWindow()
+            #thread.start_new_thread(self._launchWindow,(xres,yres))
+            QObject.connect(self.tcpSocket, SIGNAL("connected()"), self.tcpSocketConnected)
+
+            #print "connecting now"
+            while self.tcpSocket.state() != 3:
+                self.tcpSocket.connectToHost(QHostAddress("0.0.0.0"), 5006)
+                self.tcpSocket.waitForConnected(5000)
 
 
     def tcpSocketConnected(self):

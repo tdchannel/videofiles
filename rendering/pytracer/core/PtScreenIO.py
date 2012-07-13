@@ -1,6 +1,7 @@
 import sys
 import ctypes
-import BFD.lib.Runtime as rt
+import PtWorld
+#import BFD.lib.Runtime as rt
 
 all = [
     'oError',
@@ -41,9 +42,13 @@ BACKGROUND_RED  = 0x40 # background color contains red.
 BACKGROUND_INTENSITY = 0x80 # background color is intensified.
 
 std_out_handle = None
-if rt.OsTag() == "windows":
-    std_out_handle = ctypes.windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
+#if rt.OsTag() == "windows":
+#    std_out_handle = ctypes.windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
 
+verbosity = 0 
+def initialize():
+    global verbosity
+    verbosity = PtWorld.getOptions().verbose.value
 
 def set_color(color, handle=std_out_handle):
     """(color) -> BOOL
@@ -59,7 +64,7 @@ def set_color(color, handle=std_out_handle):
 
 def _mkMsg(msg,preStr="",label=None):
     if label:
-        return "%s%s: %s"%(preStr,label,msg)
+        return "%s%s - %s"%(preStr,label,msg)
     else:
         return "%s%s"%(preStr,msg)
 
@@ -67,72 +72,76 @@ def _mkMsg(msg,preStr="",label=None):
 ################
 # Status Prints
 
-def oError(msg,preStr="\n",postStr="",label=True):
-    if rt.OsTag() == "windows":
-        set_color(FOREGROUND_RED)
-        if label:
-            sys.stdout.write("%s"%_mkMsg(msg,preStr,"ERROR"))
-        else:
-            sys.stdout.write("%s"%_mkMsg(msg,preStr))
-        set_color(FOREGROUND_GREY)
-        sys.stdout.write("%s\n"%postStr)
-    else:
+def oError(msg,loglevel,preStr="\n",postStr="",label=True):
+    #if rt.OsTag() == "windows":
+    #    set_color(FOREGROUND_RED)
+    #    if label:
+    #        sys.stdout.write("%s"%_mkMsg(msg,preStr,"ERROR"))
+    #    else:
+    #        sys.stdout.write("%s"%_mkMsg(msg,preStr))
+    #    set_color(FOREGROUND_GREY)
+    #    sys.stdout.write("%s\n"%postStr)
+    #else:
+    if loglevel <= verbosity:
         if label:
             print "%s%s%s%s"%(RED,_mkMsg(msg,preStr,"ERROR"),ENDC,postStr)
         else:
             print "%s%s%s%s"%(RED,_mkMsg(msg,preStr),ENDC,postStr)
 
-def oInfo(msg,preStr="",postStr="",label=True):
-    if rt.OsTag() == "windows":
-        set_color(FOREGROUND_GREEN)
+def oInfo(msg,loglevel,preStr="",postStr="",label=True):
+    global verbosity
+    verbosity = PtWorld.getOptions().verbose.value
+    #if rt.OsTag() == "windows":
+    #    set_color(FOREGROUND_GREEN)
+    #    if label:
+    #        sys.stdout.write("%s"%_mkMsg(msg,preStr,"INFO"))
+    #    else:
+    #        sys.stdout.write("%s"%_mkMsg(msg,preStr))
+    #    set_color(FOREGROUND_GREY)
+    #    sys.stdout.write("%s\n"%postStr)
+    #else:
+    if loglevel <= verbosity:
         if label:
-            sys.stdout.write("%s"%_mkMsg(msg,preStr,"INFO"))
+            sys.stdout.write("%s%s%s%s"%(GREEN,_mkMsg(msg,preStr,"INFO"),ENDC,postStr))
         else:
-            sys.stdout.write("%s"%_mkMsg(msg,preStr))
-        set_color(FOREGROUND_GREY)
-        sys.stdout.write("%s\n"%postStr)
-    else:
-        if label:
-            print "%s%s%s%s"%(GREEN,_mkMsg(msg,preStr,"INFO"),ENDC,postStr)
-        else:
-            print "%s%s%s%s"%(GREEN,_mkMsg(msg,preStr),ENDC,postStr)
+            sys.stdout.write("%s%s%s%s"%(GREEN,_mkMsg(msg,preStr),ENDC,postStr))
 
 
 ################
 # Color Prints
 ################
 def oRed(msg,preStr="",postStr=""):
-    if rt.OsTag() == "windows":
-        sys.stdout.write("%s"%preStr)
-        set_color(FOREGROUND_RED)
-        sys.stdout.write("%s"%msg)
-        set_color(FOREGROUND_GREY)
-        sys.stdout.write("%s\n"%postStr)
-    else:
-        print "%s%s%s%s%s"%(preStr,RED,msg,ENDC,postStr)
+    #if rt.OsTag() == "windows":
+    #    sys.stdout.write("%s"%preStr)
+    #    set_color(FOREGROUND_RED)
+    #    sys.stdout.write("%s"%msg)
+    #    set_color(FOREGROUND_GREY)
+    #    sys.stdout.write("%s\n"%postStr)
+    #else:
+    print "%s%s%s%s%s"%(preStr,RED,msg,ENDC,postStr)
 
 def oGreen(msg,preStr="",postStr=""):
-    if rt.OsTag() == "windows":
-        sys.stdout.write("%s"%preStr)
-        set_color(FOREGROUND_GREEN)
-        sys.stdout.write("%s"%msg)
-        set_color(FOREGROUND_GREY)
-        sys.stdout.write("%s\n"%postStr)
-    else:
-        print "%s%s%s%s%s"%(preStr,GREEN,msg,ENDC,postStr)
+    #if rt.OsTag() == "windows":
+    #    sys.stdout.write("%s"%preStr)
+    #    set_color(FOREGROUND_GREEN)
+    #    sys.stdout.write("%s"%msg)
+    #    set_color(FOREGROUND_GREY)
+    #    sys.stdout.write("%s\n"%postStr)
+    #else:
+    print "%s%s%s%s%s"%(preStr,GREEN,msg,ENDC,postStr)
 
 
 ################
 # Query
 ################
 def iQuery(msg):
-    if rt.OsTag() == "windows":
-        set_color(FOREGROUND_BLUE)
-        sys.stdout.write("\n%s"%msg)
-        set_color(FOREGROUND_GREY)
-        retval =  raw_input("")
-        return retval
-    else:
-        return raw_input("%s\n%s%s"%(BLUE,msg,ENDC))
+    #if rt.OsTag() == "windows":
+    #    set_color(FOREGROUND_BLUE)
+    #    sys.stdout.write("\n%s"%msg)
+    #    set_color(FOREGROUND_GREY)
+    #    retval =  raw_input("")
+    #    return retval
+    #else:
+    return raw_input("%s\n%s%s"%(BLUE,msg,ENDC))
 
 

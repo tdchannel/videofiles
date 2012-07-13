@@ -23,7 +23,8 @@ class PtPoint():
         self.w = 1
   
     def transform(self,xf,ret=False):
-        m = xf.m.m
+        #m = xf.m.m
+        m = xf.m
         x = self.x; y=self.y; z=self.z;
         
         xp = m[0]*x + m[1]*y + m[2]*z + m[3]
@@ -98,6 +99,8 @@ class PtPoint():
     #
     # less than
     def __lt__(self, other):
+        if other.__class__.__name__ != self.__class__.__name__:
+            return False
         if other.x < self.x and other.y < self.y and other.z < self.z:
             return True
         else:
@@ -105,6 +108,8 @@ class PtPoint():
 
     # less than or equal
     def __le__(self,other):
+        if other.__class__.__name__ != self.__class__.__name__:
+            return False
         if other.x <= self.x and other.y <= self.y and other.z <= self.z:
             return True
         else:
@@ -112,24 +117,36 @@ class PtPoint():
 
     # equal
     def __eq__(self, other):
+        if other.__class__.__name__ != self.__class__.__name__:
+            return False
         if other.x == self.x and other.y == self.y and other.z == self.z:
             return True
         else:
             return False
+
     # not equal
     def __ne__(self,other):
+        if other.__class__.__name__ != self.__class__.__name__:
+            return False
+
         if other.x != self.x and other.y != self.y and other.z != self.z:
             return True
         else:
             return False
+
     # greater than or equal
     def __gt__(self, other):
+        if other.__class__.__name__ != self.__class__.__name__:
+            return False
         if other.x >= self.x and other.y >= self.y and other.z >= self.z:
             return True
         else:
             return False
+    
     # greater than
     def __ge__(self, other):
+        if other.__class__.__name__ != self.__class__.__name__:
+            return False
         if other.x > self.x and other.y > self.y and other.z > self.z:
             return True
         else:
@@ -147,7 +164,8 @@ class PtVector(PtPoint):
         self.w = 0 
 
     def transform(self,xf,ret=False):
-        m = xf.m.m
+        #m = xf.m.m
+        m = xf.m
         x = self.x; y=self.y; z=self.z;
         
         xp = m[0]*x + m[1]*y + m[2]*z + m[3]
@@ -186,7 +204,18 @@ class PtRay():
         self.d = direction
         self.mint = 0.
         self.maxt = 0.
-        
+   
+    def offset(self,val,ret=False):
+        rout = self.__class__() 
+        rout.d *= val
+        rout.o += self.d
+        if ret:
+            return rout
+        else:
+            self.o = rout.o
+            self.d = rout.d
+
+
     def transform(self,xform,ret=False):
         rout = self.__class__()
         rout.o = self.o.transform(xform,True)

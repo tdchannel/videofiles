@@ -9,7 +9,6 @@ class ortho_camera(PtCamera.PtCamera):
     def __init__(self,name=None):
         PtCamera.PtCamera.__init__(self,name=name)
 
-
     def createRay(self,x,y):
         near = self.params['near'].value
         far = self.params['far'].value
@@ -19,13 +18,15 @@ class ortho_camera(PtCamera.PtCamera):
         xres = PtWorld.options.xres.value
         yres = PtWorld.options.yres.value
 
-        # create a transform
-        xf = PtTransform.PtTransform(m)
-        # flip the values  (why? IHNFI)
+        ## create a transform
+        #xf = PtTransform.PtTransform(m)
+        ## flip the values  (why? IHNFI)
         o.y *=-1; o.z *=-1
         xpoint = PtTransform.PiTranslate(o)
-        # multipliy the xform by the position
-        xf *= xpoint
+        #xpoint = PtTransform.PtMatrix()
+       
+        ## multipliy the xform by the position
+        m *= xpoint
 
         px = x - xres / 2. + 0.5
         py = y - yres / 2. + 0.5
@@ -34,5 +35,5 @@ class ortho_camera(PtCamera.PtCamera):
                            direction=PtGeom.PtVector(d.x,d.y,d.z))
         tmp.mint = near
         tmp.maxt = far
-        tmp.transform(xf)
+        tmp.transform(m)
         return tmp

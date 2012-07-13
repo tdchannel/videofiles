@@ -1,6 +1,6 @@
 import unittest
 
-from ..core import PtBucket
+from pytracer.core import PtBucket
 
 class PtBucketTest(unittest.TestCase):
     def test_bwSquare(self):

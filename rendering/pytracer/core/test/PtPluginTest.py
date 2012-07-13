@@ -1,8 +1,8 @@
 import os
 import unittest
 
-from .core.PtPlugin import PtPlugin 
-from .core import PtParam 
+from pytracer.core.PtPlugin import PtPlugin 
+from pytracer.core import PtParam 
 
 class PtPluginTest(unittest.TestCase):
 

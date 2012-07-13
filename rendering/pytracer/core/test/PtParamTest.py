@@ -1,12 +1,10 @@
 import os
 import unittest
 
-from .core import PtParam 
-from .core import PtGeom
+from pytracer.core import PtParam 
+from pytracer.core import PtGeom
 
 class PtParamTest(unittest.TestCase):
-
-
     def test_basePtParam(self):
         # test for none init
         param = PtParam.PtParamBase()
@@ -44,11 +42,11 @@ class PtParamTest(unittest.TestCase):
         self.assertEqual(param.value,val)
 
     def test_pointPtParam(self):
+        val = PtGeom.PtPoint()
         # test for none init
         param = PtParam.PtParamPoint()
-        self.assertEqual(param.value,None)
+        self.assertEqual(param.value,val)
         # test SetValue
-        val = PtGeom.PtPoint()
         param.setValue(val)
         self.assertEqual(param.value,val)
         # test for value init

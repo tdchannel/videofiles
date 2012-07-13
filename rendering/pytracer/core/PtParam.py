@@ -69,6 +69,9 @@ class PtParamPoint(PtParamBase):
         if value != None:
             self.setValue(value)
             self.default = value
+        else:
+            self.setValue(PtGeom.PtPoint())
+            self.default = PtGeom.PtPoint()
 
     def __str__(self):
         return "[%s %s %s]"%(self.value.x,self.value.y,self.value.z)

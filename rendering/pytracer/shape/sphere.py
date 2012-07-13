@@ -11,7 +11,7 @@ class sphere(PtShape.PtShape):
     def __init__(self,name=None):
         PtShape.PtShape.__init__(self,name=name)
         # add sphere parameters
-        self.addParamFloat("radius",1.)
+        self.addParamFloat("radius",10.)
         self.addParamFloat("phiMax", 360.)
         self.addParamFloat("zmin", -1.)
         self.addParamFloat("zmax",  1.)
@@ -41,6 +41,7 @@ class sphere(PtShape.PtShape):
 
     def prepare(self):
         if self.prepared == False:
+            self.bound()
             self.prepared = True
 
 
@@ -70,13 +71,15 @@ class sphere(PtShape.PtShape):
         m = self.params['matrix'].value
 
         # transform for sphere matrix
-        xf = PtTransform.PtTransform(m)
+        #xf = PtTransform.PtTransform(m)
         # transform for sphere center
         xpoint = PtTransform.PiTranslate(pos)
         # multiply transforms
-        xf *= xpoint
+        #xf *= xpoint
+        m *= xpoint
         # get a local ray
-        ray.transform(xf)
+        #ray.transform(xf)
+        ray.transform(m)
 
         A = ray.d.x*ray.d.x + ray.d.y*ray.d.y + ray.d.z * ray.d.z
         B = 2 * (ray.d.x*ray.o.x + ray.d.y*ray.o.y + ray.d.z*ray.o.z)
@@ -96,14 +99,14 @@ class sphere(PtShape.PtShape):
                 return False
 
         # Compute sphere hit position and $\phi
-        phit = ray.offset(thit)
-        phit = math.atan2(phit.y,phit.x)
+        phit = ray.offset(thit,True)
+        phi = math.atan2(phit.o.y,phit.o.x)
         if phi < 0.:
             phi += 2. * path.pi 
 
         #  Test sphere intersection against clipping parameters 
-        if (zmin > -radius and phit.z < zmin) or \
-           (zmax < radius and phit.z < zmax) or \
+        if (zmin > -radius and phit.o.z < zmin) or \
+           (zmax < radius and phit.o.z < zmax) or \
            phi > phiMax:
             if thit == 1:
                 return False
@@ -111,11 +114,11 @@ class sphere(PtShape.PtShape):
                 return False
             thit = t1
         # Compute sphere hit position and $\phi$
-            phit = ray.offset(thit)
-            phi = math.atan2(phit.y,phit.x)
+            phit = ray.offset(thit,True)
+            phi = math.atan2(phit.o.y,phit.o.x)
             if phi < 0.:
                 phi += 2. * math.pi
-            if phit.z < zmin or phit.z > zmax or phi > phiMax:
+            if phit.o.z < zmin or phit.o.z > zmax or phi > phiMax:
                 return False
         
         return True

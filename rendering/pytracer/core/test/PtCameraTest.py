@@ -1,11 +1,10 @@
 import os
 import unittest
 
-from .core import PtCamera
-from .core import PtNode
-from .core import PtGeom
-
-from .core import PtRender
+from pytracer.core import PtCamera
+from pytracer.core import PtNode
+from pytracer.core import PtGeom
+from pytracer.core import PtRender
 
 class PtCameraTest(unittest.TestCase):
 

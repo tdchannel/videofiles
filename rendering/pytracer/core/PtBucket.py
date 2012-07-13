@@ -15,24 +15,27 @@ class PtBucket():
         xres = PtWorld.options.xres.value
         yres = PtWorld.options.yres.value
 
-        self.pixels = []
+        self.pixels =[]# [PtPixel.PtPixel()]*self.width * self.height
         for i in range(self.width * self.height):
             self.pixels.append(PtPixel.PtPixel())
 
         cam = PtWorld.cameras[0]
-
         for y in range(self.pos.y, self.pos.y+ self.height):
             for x in range(self.pos.x, self.pos.x + self.width):
-                
                 ray = cam.createRay(x,y)
                 px = pixels[(y * xres)+x]
                 bpos = ((y - self.pos.y) * self.width) + (x-self.pos.x)
                 pxb = self.pixels[bpos]
                 
-
-                pxb.r = px.r = (x / float(xres)) * 255
-                pxb.g = px.g = (y / float(yres)) * 255
-                pxb.b = px.b = 255
+                for shape in PtWorld.shapes:
+                    if shape.intersectP(ray):
+                        pxb.r = px.r = 255
+                        pxb.g = px.g = 255
+                        pxb.b = px.b = 255
+                    else:
+                        pxb.r = px.r = (x / float(xres)) * 255
+                        pxb.g = px.g = (y / float(yres)) * 255
+                        pxb.b = px.b = 255
 
 class PtBucketWorker():
     def __init__(self):

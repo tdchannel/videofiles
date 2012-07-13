@@ -125,36 +125,13 @@ class PtMatrix():
         dst = self.__class__()
         dst.fromList(d)
         dst.transpose
-        self.m = copy.copy(dst.m)
-
-    def __getitem__(self,key):
-        return self.m[key]
-
-    def __setitem__(self,key,value):
-        self.m[key] = float(value)
-	
-    def __str__(self):
-        stout = ""
-        for i in range(4):
-            stout += "%.10f %.10f %.10f %.10f\n" %(self.m[i*4],self.m[i*4+1],
-                                                   self.m[i*4+2],self.m[i*4+3])
-        return stout
-	  
-class PtTransform():
-    def __init__(self,*args):
-        if len(args) > 0 and args[0].__class__.__name__ == "PtMatrix":
-            self.m = args[0] 
-        else:
-            self.m = PtMatrix()
-
-        self.mInv = copy.copy(self.m)
-        self.mInv.invert
+        self.m = dst.m
 
     def __mul__(self,other):
-        if other.__class__.__name__ == "PtTransform":
+        if other.__class__.__name__ == "PtMatrix":
             ret = PtMatrix()
-            a = self.m.m
-            b = other.m.m
+            a = self.m
+            b = other.m
             
             ret[0]  = a[0]*b[0] + a[1]*b[4] + a[2]*b[8] + a[3]*b[12]
             ret[1]  = a[0]*b[1] + a[1]*b[5] + a[2]*b[9] + a[3]*b[13]
@@ -176,7 +153,59 @@ class PtTransform():
             ret[14] = a[12]*b[2] + a[13]*b[6] + a[14]*b[10] + a[15]*b[14]
             ret[15] = a[12]*b[3] + a[13]*b[7] + a[14]*b[11] + a[15]*b[15]
             
-            return PtTransform(ret)
+            return ret
+
+    def __getitem__(self,key):
+        return self.m[key]
+
+    def __setitem__(self,key,value):
+        self.m[key] = float(value)
+	
+    def __str__(self):
+        stout = ""
+        for i in range(4):
+            stout += "%.10f %.10f %.10f %.10f\n" %(self.m[i*4],self.m[i*4+1],
+                                                   self.m[i*4+2],self.m[i*4+3])
+        return stout
+	  
+#class PtTransform():
+#    def __init__(self,*args):
+#        if len(args) > 0 and args[0].__class__.__name__ == "PtMatrix":
+#            self.m = args[0] 
+#            self.mInv = args[0]
+#        else:
+#            self.m = PtMatrix()
+#            self.mInv = PtMatrix()
+#
+#        #self.mInv.invert
+#
+#    def __mul__(self,other):
+#        if other.__class__.__name__ == "PtTransform":
+#            ret = PtMatrix()
+#            a = self.m.m
+#            b = other.m.m
+#            
+#            ret[0]  = a[0]*b[0] + a[1]*b[4] + a[2]*b[8] + a[3]*b[12]
+#            ret[1]  = a[0]*b[1] + a[1]*b[5] + a[2]*b[9] + a[3]*b[13]
+#            ret[2]  = a[0]*b[2] + a[1]*b[6] + a[2]*b[10] + a[3]*b[14]
+#            ret[3]  = a[0]*b[3] + a[1]*b[7] + a[2]*b[11] + a[3]*b[15]
+#            
+#            ret[4]  = a[4]*b[0] + a[5]*b[4] + a[6]*b[8] + a[7]*b[12]
+#            ret[5]  = a[4]*b[1] + a[5]*b[5] + a[6]*b[9] + a[7]*b[13]
+#            ret[6]  = a[4]*b[2] + a[5]*b[6] + a[6]*b[10] + a[7]*b[14]
+#            ret[7]  = a[4]*b[3] + a[5]*b[7] + a[6]*b[11] + a[7]*b[15]
+#            
+#            ret[8]  = a[8]*b[0] + a[9]*b[4] + a[10]*b[8] + a[11]*b[12]
+#            ret[9]  = a[8]*b[1] + a[9]*b[5] + a[10]*b[9] + a[11]*b[13]
+#            ret[10] = a[8]*b[2] + a[9]*b[6] + a[10]*b[10] + a[11]*b[14]
+#            ret[11] = a[8]*b[3] + a[9]*b[7] + a[10]*b[11] + a[11]*b[15]
+#            
+#            ret[12] = a[12]*b[0] + a[13]*b[4] + a[14]*b[8] + a[15]*b[12]
+#            ret[13] = a[12]*b[1] + a[13]*b[5] + a[14]*b[9] + a[15]*b[13]
+#            ret[14] = a[12]*b[2] + a[13]*b[6] + a[14]*b[10] + a[15]*b[14]
+#            ret[15] = a[12]*b[3] + a[13]*b[7] + a[14]*b[11] + a[15]*b[15]
+#            
+#            return PtTransform(ret)
 
 def PiTranslate(*args):
     if len(args) > 0 and type(args[0]) == list:
@@ -201,7 +230,8 @@ def PiTranslate(*args):
          0.,0.,1.,z,
          0.,0.,0.,1.]
     mat = PtMatrix(l)
-    return PtTransform(mat)
+    return mat
+    #return PtTransform(mat)
 
 def PiScale(*args):
     if len(args) > 0 and type(args[0]) == list:
@@ -225,14 +255,14 @@ def PiScale(*args):
                   0.,y,0.,0.,
                   0.,0.,z,0.,
                   0.,0.,0.,1.])
-    mi = PtMatrix([1./x,0.,0.,0.,
-                  0.,1./y,0.,0.,
-                  0.,0.,1./z,0.,
-                  0.,0.,0.,1.])
-    t = PtTransform()
-    t.m = m
-    t.mInv =mi
-    return t
+    #mi = PtMatrix([1./x,0.,0.,0.,
+    #              0.,1./y,0.,0.,
+    #              0.,0.,1./z,0.,
+    #              0.,0.,0.,1.])
+    #t = PtTransform()
+    #t.m = m
+    #t.mInv =mi
+    return m
 
 
 def PiRotateX(angle):
@@ -243,7 +273,8 @@ def PiRotateX(angle):
             0.,sin_t,cos_t ,0.,
             0.,0.,   0.,    1.]
     rotm = PtMatrix(rotl)
-    return PtTransform(rotm)
+    return rotm
+    #return PtTransform(rotm)
 
 def PiRotateY(angle):
     sin_t = math.sin(float(angle))
@@ -253,7 +284,8 @@ def PiRotateY(angle):
             -sin_t,0., cos_t, 0.,
             0.,    0., 0.,    1.]
     rotm = PtMatrix(rotl)
-    return PtTransform(rotm)
+    return rotm
+    #return PtTransform(rotm)
 
 def PiRotateZ(angle):
     sin_t = math.sin(float(angle))
@@ -263,7 +295,8 @@ def PiRotateZ(angle):
             0.,    0.,     1.,0.,
             0.,    0.,     0.,1.]
     rotm = PtMatrix(rotl)
-    return PtTransform(rotm)
+    return rotm
+    #return PtTransform(rotm)
 
 # ////////////
 # // TO DO: rotate by axis
