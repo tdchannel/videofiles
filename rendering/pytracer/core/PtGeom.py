@@ -164,13 +164,12 @@ class PtVector(PtPoint):
         self.w = 0 
 
     def transform(self,xf,ret=False):
-        #m = xf.m.m
         m = xf.m
         x = self.x; y=self.y; z=self.z;
         
-        xp = m[0]*x + m[1]*y + m[2]*z + m[3]
-        yp = m[4]*x + m[5]*y + m[6]*z + m[7]
-        zp = m[8]*x + m[9]*y + m[10]*z+ m[11]
+        xp = m[0]*x + m[1]*y + m[2]*z
+        yp = m[4]*x + m[5]*y + m[6]*z
+        zp = m[8]*x + m[9]*y + m[10]*z
         if ret:       
             return self.__class__(xp,yp,zp)
         else:

@@ -102,7 +102,7 @@ class sphere(PtShape.PtShape):
         phit = ray.offset(thit,True)
         phi = math.atan2(phit.o.y,phit.o.x)
         if phi < 0.:
-            phi += 2. * path.pi 
+            phi += 2. * math.pi 
 
         #  Test sphere intersection against clipping parameters 
         if (zmin > -radius and phit.o.z < zmin) or \

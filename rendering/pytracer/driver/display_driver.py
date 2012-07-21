@@ -56,7 +56,7 @@ class display_driver(PtDriver.PtDriver):
             i > ((bucket.height * bucket.width) - bucket.width) or \
             (i % bucket.width) == 0 or\
             (((i+1) % bucket.width) + bucket.width) == bucket.width:
-                bu += struct.pack("3I",255,255,255)
+                bu += struct.pack("3I",255,255,0)
             else:
                 bu += struct.pack("3I",0,0,0)
 

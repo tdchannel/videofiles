@@ -1,6 +1,6 @@
 import PtCommon
 import PtGeom
-import PtTransform
+from PtTransform import *
 
 class PtParamError(Exception):
     def __init__(self,value):
@@ -121,7 +121,8 @@ class PtParamMatrix(PtParamBase):
         return "%s"%(self.value)
     
     def setValue(self,value):
-        if isinstance(value, PtTransform.PtMatrix) :
+        #if isinstance(value, PtMatrix) :
+        if value.__class__.__name__ == "PtMatrix":
             PtParamBase.setValue(self,value)
         elif type(value) == list:
             # make a vector
