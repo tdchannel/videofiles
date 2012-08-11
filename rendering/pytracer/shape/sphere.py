@@ -11,7 +11,7 @@ class sphere(PtShape.PtShape):
     def __init__(self,name=None):
         PtShape.PtShape.__init__(self,name=name)
         # add sphere parameters
-        self.addParamFloat("radius",10.)
+        self.addParamFloat("radius",1.)
         self.addParamFloat("phiMax", 360.)
         self.addParamFloat("zmin", -1.)
         self.addParamFloat("zmax",  1.)
@@ -64,28 +64,25 @@ class sphere(PtShape.PtShape):
 
     def intersectP(self,ray):
         radius = self.params['radius'].value
-        zmin = self.params['zmin'].value
-        zmax = self.params['zmax'].value
+        zmin = self.params['zmin'].value * radius
+        zmax = self.params['zmax'].value * radius
         phiMax=self.params['phiMax'].value
         pos = self.params['center'].value
         m = self.params['matrix'].value
 
-        # transform for sphere matrix
-        #xf = PtTransform.PtTransform(m)
         # transform for sphere center
         xpoint = PtTransform.PiTranslate(pos)
         # multiply transforms
-        #xf *= xpoint
         m *= xpoint
         # get a local ray
-        #ray.transform(xf)
         ray.transform(m)
-
+        # variables for quadratic function
         A = ray.d.x*ray.d.x + ray.d.y*ray.d.y + ray.d.z * ray.d.z
         B = 2 * (ray.d.x*ray.o.x + ray.d.y*ray.o.y + ray.d.z*ray.o.z)
         C = ray.o.x*ray.o.x + ray.o.y*ray.o.y + ray.o.z*ray.o.z - radius*radius
         
         hit, t0, t1 = PtMath.quadratic(A,B,C)
+        
         if not hit:
             return False
         #  Compute intersection distance along ray
@@ -99,22 +96,31 @@ class sphere(PtShape.PtShape):
                 return False
 
         # Compute sphere hit position and $\phi
-        phit = ray.offset(thit,True)
+        #phit = PtGeom.PtRay(origin=ray.o,direction=ray.d,
+        #                    mint=ray.mint,maxt=ray.maxt)
+        phit = ray
+        phit.offset(thit)
+
+        #phit = ray.offset(thit,True)
+        
+        #print phit
         phi = math.atan2(phit.o.y,phit.o.x)
         if phi < 0.:
             phi += 2. * math.pi 
-
         #  Test sphere intersection against clipping parameters 
         if (zmin > -radius and phit.o.z < zmin) or \
-           (zmax < radius and phit.o.z < zmax) or \
-           phi > phiMax:
+           (zmax < radius and phit.o.z > zmax) or \
+           phi > math.radians(phiMax):
             if thit == 1:
                 return False
             if t1 > ray.maxt:
                 return False
             thit = t1
         # Compute sphere hit position and $\phi$
-            phit = ray.offset(thit,True)
+            #phit = ray.offset(thit,True)
+            #phit = PtGeom.PtRay(origin=ray.o,direction=ray.d,
+            #                mint=ray.mint,maxt=ray.maxt)
+            phit.offset(thit)
             phi = math.atan2(phit.o.y,phit.o.x)
             if phi < 0.:
                 phi += 2. * math.pi

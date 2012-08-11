@@ -266,8 +266,8 @@ def PiScale(*args):
 
 
 def PiRotateX(angle):
-    sin_t = math.sin(float(angle))
-    cos_t = math.cos(float(angle))
+    sin_t = math.sin(math.radians(angle))
+    cos_t = math.cos(math.radians(angle))
     rotl = [1.,0.,   0.,    0.,
             0.,cos_t,-sin_t,0.,
             0.,sin_t,cos_t ,0.,
@@ -277,8 +277,8 @@ def PiRotateX(angle):
     #return PtTransform(rotm)
 
 def PiRotateY(angle):
-    sin_t = math.sin(float(angle))
-    cos_t = math.cos(float(angle))
+    sin_t = math.sin(math.radians(angle))
+    cos_t = math.cos(math.radians(angle))
     rotl = [cos_t, 0., sin_t,0.,
             0.,    1., 0     ,0.,
             -sin_t,0., cos_t, 0.,
@@ -288,8 +288,8 @@ def PiRotateY(angle):
     #return PtTransform(rotm)
 
 def PiRotateZ(angle):
-    sin_t = math.sin(float(angle))
-    cos_t = math.cos(float(angle))
+    sin_t = math.sin(math.radians(angle))
+    cos_t = math.cos(math.radians(angle))
     rotl = [cos_t, -sin_t, 0., 0.,
             sin_t, cos_t,  0.,0.,
             0.,    0.,     1.,0.,

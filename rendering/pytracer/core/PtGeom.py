@@ -1,4 +1,4 @@
-
+import copy
 
 class PtPointError(Exception):
     def __init__(self,value):
@@ -156,10 +156,10 @@ class PtPoint():
     def __str__(self):
         return "[%s,%s,%s]"%(self.x,self.y,self.z)
 
-PtPoint2 = PtPoint
 
+PtPoint2 = PtPoint
 class PtVector(PtPoint):
-    def __init__(self,x=0,y=0,z=0):
+    def __init__(self,x=0.,y=0.,z=0.):
         PtPoint.__init__(self,x=x,y=y,z=z)
         self.w = 0 
 
@@ -198,16 +198,29 @@ class PtBBox():
 
 
 class PtRay():
-    def __init__(self,origin=PtPoint(),direction=PtVector(0,0,1)):
-        self.o = origin
-        self.d = direction
-        self.mint = 0.
-        self.maxt = 0.
+    def __init__(self,origin=None,direction=None,
+                    mint=None,maxt=None):
+        if origin:
+            self.o = origin
+        else:
+            self.o = PtPoint(0.,0.,0.)
+        if direction:
+            self.d = direction
+        else:
+            self.d = PtVector(0.,0.,1.)
+        if mint:
+            self.mint = mint
+        else:
+            self.mint = 0.
+        if maxt:
+            self.maxt = maxt
+        else:
+            self.maxt = 10000000.
    
     def offset(self,val,ret=False):
-        rout = self.__class__() 
+        rout = copy.copy(self)#.__class__() 
         rout.d *= val
-        rout.o += self.d
+        rout.o += rout.d
         if ret:
             return rout
         else:
@@ -228,4 +241,4 @@ class PtRay():
 
 
     def __str__(self):
-        return "o %s\nd %s"%(self.o,self.d)
+        return "o %s d %s\nmin %s  max %s"%(self.o,self.d,self.mint,self.maxt)
