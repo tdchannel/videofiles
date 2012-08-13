@@ -13,4 +13,5 @@ class PtOptions(PtPlugin.PtPlugin):
         self.addParamInt("bucketSize",32)
         self.addParamInt("verbose",0)
         self.addParamString("outputFile","image")
+        self.addParamInt("samples",1)
 

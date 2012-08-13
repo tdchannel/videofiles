@@ -100,10 +100,10 @@ def PtRender():
     minutes, seconds = divmod(remainder, 60)
     print "process time %02d:%02d:%02d:%02d"%(hours,minutes,seconds,timeDiff.microseconds)
 
-    # close the driver
-    PtWorld.driver.close()
 
 
 def PtEnd():
+    # close the driver
+    PtWorld.driver.close()
     pass
 

@@ -9,7 +9,7 @@ options = PtWorld.getOptions()
 options.verbose.setValue(2)
 options.xres.setValue(250)
 options.yres.setValue(250)
-#options.bucketSize.setValue(10)
+options.bucketSize.setValue(52)
 
 cam = PtNode("ortho_camera")
 
@@ -21,7 +21,10 @@ rot = PiRotateX(90.)
 #sph.zmin.setValue(-0.5)
 #sph.zmax.setValue(0.5)
 
+
 PtWorld.driver = PtNode("display_driver")
-PtRender()
+for i in range(-4,1):
+    options.samples.setValue(i)
+    PtRender()
 
 PtEnd()
