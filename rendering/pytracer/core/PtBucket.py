@@ -3,6 +3,7 @@ import math
 import PtGeom
 import PtWorld
 import PtPixel
+import random
 
 class PtBucket():
     def  __init__(self,pos=PtGeom.PtPoint2(0,0),
@@ -28,31 +29,69 @@ class PtBucket():
         if samples >= 0:
             realSamples = 1
         else:
-            realSamples = int(abs(samples) * 2)**2
+            realSamples = int(pow(2,abs(samples)))
+            realSamples = abs(samples)
 
-        #print realSamples
+        
         for y in range(self.pos.y, self.pos.y+ self.height, realSamples):
             for x in range(self.pos.x, self.pos.x + self.width, realSamples):
                
                 # get the center of the pixel
-                pixelDelta = 0.5 * realSamples
-                #print x,y,pixelDelta
-                ray = cam.createRay(x+pixelDelta,y+pixelDelta)
-                px = pixels[(y * xres)+x]
+                pixelDelta = 0
+                if samples < 0:
+                    pixelDelta = 0.5 * realSamples
+
+                bucketColorR = random.randint(0,255)
+                bucketColorG = random.randint(0,255)
+                bucketColorB = random.randint(0,255)
                 
+                #print "-"*20
+                #print "orig sample ",x,y
+                #print "real sample ",x+pixelDelta,y+pixelDelta
+                #print "paint x from %s to %s"%(x,x+(realSamples-1))
+                #print "paint y from %s to %s"%(y,y+(realSamples-1)) 
+                #print "-"*20
+                ray = cam.createRay(x+pixelDelta,y+pixelDelta)
+                # get a pointer to the current pixel
+                #print "px ",(y * xres) + x
+                #print "#"*20
+
+                px = pixels[(y * xres)+x]
+
+                #for j in range(realSamples):
+                #    for i in range(realSamples):
+                #        bpos = (((y+i) - self.pos.y) * self.width) + ((x+j) -self.pos.x)
+                #        pxb = self.pixels[min(bpos,len(self.pixels)-1)]
+                #        pxb.r = px.r = bucketColorR
+                #        pxb.g = px.g = bucketColorG
+                #        pxb.b = px.b = bucketColorB
+
                 for shape in PtWorld.shapes:
                     if shape.intersectP(ray):
+                        #print "hit at ",x+pixelDelta,y+pixelDelta
+                        #print "-"*20
                         for j in range(realSamples):
                             for i in range(realSamples):
-                                bpos = (((y+j) - self.pos.y) * self.width) + ((x+i)-self.pos.x)
+                                #bpos = (((y+j) - self.pos.y) * self.width) + ((x+i)-self.pos.x)
+                                bpos = (((y+i) - self.pos.y) * self.width) + ((x+j)-self.pos.x)
+                                #if bpos > (PtWorld.options.bucketSize.value**2):    
+                                #print bpos,x+i+(realSamples*2),y+j+(realSamples*2)
                                 pxb = self.pixels[min(bpos,len(self.pixels)-1)]
                                 pxb.r = px.r = 255
                                 pxb.g = px.g = 255
                                 pxb.b = px.b = 255
+                                #pxb.r = px.r = (x / float(xres)) * 255
+                                #pxb.g = px.g = (y / float(yres)) * 255
+                                #pxb.b = px.b = 255
                     else:
+                        #print "miss at ",x+pixelDelta,y+pixelDelta
+                        #print "-"*20
                         for j in range(realSamples):
                             for i in range(realSamples):
-                                bpos = (((y+j) - self.pos.y) * self.width) + ((x+i)-self.pos.x)
+                                #bpos = (((y+j) - self.pos.y) * self.width) + ((x+i)-self.pos.x)
+                                bpos = ((((y+i) - self.pos.y) *self.width) + ((x+j)-self.pos.x))
+                                #if bpos > (PtWorld.options.bucketSize.value**2):    
+                                #print bpos,x+i+(realSamples*2),y+j+(realSamples*2)
                                 pxb = self.pixels[min(bpos,len(self.pixels)-1)]
                                 pxb.r = px.r = (x / float(xres)) * 255
                                 pxb.g = px.g = (y / float(yres)) * 255

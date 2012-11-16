@@ -5,8 +5,8 @@ from PyQt4 import QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtNetwork import QTcpSocket, QHostAddress
 
-from .core import PtCommon
-from .core import PtDriver
+from pytracer.core import PtCommon
+from pytracer.core import PtDriver
 import core.PtWorld as PtWorld
 
 class display_driver(PtDriver.PtDriver):

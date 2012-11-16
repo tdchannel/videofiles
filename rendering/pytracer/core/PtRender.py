@@ -36,7 +36,7 @@ def PtBegin(verbose=0):
                      label=False)
             PtPluginManager.loadPlugins(pdir,core=True)    
 
-    PtWorld.driver = PtNode("jpeg_driver")
+    PtWorld.driver = PtNode("display_driver")
 
 
 def PtRender():

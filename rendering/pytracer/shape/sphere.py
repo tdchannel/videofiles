@@ -1,10 +1,10 @@
 import math
 
-from .core import PtCommon
-from .core import PtShape
-from .core import PtGeom
-from .core import PtMath
-from .core import PtTransform
+from pytracer.core import PtCommon
+from pytracer.core import PtShape
+from pytracer.core import PtGeom
+from pytracer.core import PtMath
+from pytracer.core import PtTransform
 import core.PtWorld as PtWorld
 
 class sphere(PtShape.PtShape):

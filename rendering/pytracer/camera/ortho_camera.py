@@ -1,7 +1,7 @@
-from .core import PtCommon
-from .core import PtCamera
-from .core import PtTransform
-from .core import PtGeom
+from pytracer.core import PtCommon
+from pytracer.core import PtCamera
+from pytracer.core import PtTransform
+from pytracer.core import PtGeom
 
 import pytracer.core.PtWorld as PtWorld
 
@@ -28,8 +28,8 @@ class ortho_camera(PtCamera.PtCamera):
         ## multipliy the xform by the position
         m *= xpoint
 
-        px = x - xres / 2. #+ 0.5
-        py = y - yres / 2. #+ 0.5
+        px = x - xres / 2. + 0.5
+        py = y - yres / 2. + 0.5
 
         tmp = PtGeom.PtRay(origin=PtGeom.PtPoint(px,py,o.z),
                            direction=PtGeom.PtVector(d.x,d.y,d.z))
